@@ -1,0 +1,114 @@
+/* Дополнения к существующим стилям */
+
+/* Контейнер для пробега с единицами измерения */
+.mileage-container {
+    display: flex;
+    gap: 10px;
+}
+
+.mileage-container input {
+    flex: 1;
+}
+
+.mileage-container select {
+    width: 120px;
+}
+
+.mileage-conversion {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    margin-top: 5px;
+}
+
+/* Стили для тултипов */
+.with-tooltip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.tooltip-icon {
+    cursor: help;
+    font-size: 0.8rem;
+}
+
+.tooltip-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 12px;
+    box-shadow: var(--shadow);
+    z-index: 1000;
+    min-width: 300px;
+    max-width: 400px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.with-tooltip:hover .tooltip-content {
+    display: block;
+}
+
+/* Загрузка файлов */
+.file-upload-container {
+    border: 2px dashed var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.file-upload-container:hover {
+    border-color: var(--primary-color);
+}
+
+.file-upload-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-upload-btn:hover {
+    background: var(--primary-dark);
+}
+
+.uploaded-files-list {
+    margin-top: 15px;
+    text-align: left;
+}
+
+.uploaded-file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(99, 102, 241, 0.1);
+    border-radius: 6px;
+    margin-bottom: 5px;
+}
+
+/* Адаптивность для новых элементов */
+@media (max-width: 768px) {
+    .mileage-container {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .mileage-container select {
+        width: 100%;
+    }
+    
+    .tooltip-content {
+        min-width: 250px;
+        max-width: 300px;
+    }
+}
