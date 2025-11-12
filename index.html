@@ -190,6 +190,35 @@
                         </div>
                     </div>
 
+                    <!-- Документы и юридическая часть -->
+                    <div class="section-title">📑 Документы и юридическая часть</div>
+                    <div class="card">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="legal_check">Юридическая проверка</label>
+                                <select id="legal_check" name="legal_check">
+                                    <option value="Проведена">✅ Проведена</option>
+                                    <option value="Не проводилась">❌ Не проводилась</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="legal_status">Статус юридической чистоты</label>
+                                <select id="legal_status" name="legal_status">
+                                    <option value="">-- Выберите статус --</option>
+                                    <option value="Чистый, ограничений нет">Чистый, ограничений нет</option>
+                                    <option value="Есть ограничения / аресты">Есть ограничения / аресты</option>
+                                    <option value="Есть залоги / кредиты">Есть залоги / кредиты</option>
+                                    <option value="Пробег по базам вызывает вопросы">Пробег по базам вызывает вопросы</option>
+                                    <option value="Проверка не проводилась">Проверка не проводилась</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="legal_comment">Комментарий по документам</label>
+                            <textarea id="legal_comment" name="legal_comment" rows="2" placeholder="Например: проверка через Автокод и ГИБДД, ограничений нет, ПТС оригинал..."></textarea>
+                        </div>
+                    </div>
+
                     <!-- Финансовые данные -->
                     <div class="section-title">💰 Финансовые данные</div>
                     <div class="card">
@@ -214,34 +243,6 @@
                             <div class="form-group">
                                 <label for="investment_cost">Стоимость вложений</label>
                                 <input type="text" id="investment_cost" name="investment_cost" placeholder="5 000 руб">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Диагностика -->
-                    <div class="section-title">🔧 Детальная диагностика</div>
-                    <div class="card">
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="appearance_rating">Внешний вид (1-5)</label>
-                                <input type="number" id="appearance_rating" name="appearance_rating" min="1" max="5" placeholder="5">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="engine_rating">Двигатель/КПП (1-5)</label>
-                                <input type="number" id="engine_rating" name="engine_rating" min="1" max="5" placeholder="5">
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="electronics_rating">Электрооборудование (1-5)</label>
-                                <input type="number" id="electronics_rating" name="electronics_rating" min="1" max="5" placeholder="4">
-                            </div>
-
-                            <div class="form-group">
-                                <label for="suspension_rating">Подвеска (1-5)</label>
-                                <input type="number" id="suspension_rating" name="suspension_rating" min="1" max="5" placeholder="4">
                             </div>
                         </div>
                     </div>
