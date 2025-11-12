@@ -149,7 +149,7 @@
 
                             <div class="form-group">
                                 <label for="motorcycle_class">Класс мотоцикла</label>
-                                <select id="motorcycle_class" name="motorcycle_class" data-tooltip="Выберите класс мотоцикла для отображения подробной информации">
+                                <select id="motorcycle_class" name="motorcycle_class">
                                     <option value="">-- Выберите класс --</option>
                                     <option value="Спортивные (Sport)">Спортивные (Sport)</option>
                                     <option value="Голые (Naked)">Голые (Naked)</option>
@@ -173,7 +173,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="gearbox_type">Тип коробки</label>
-                                <select id="gearbox_type" name="gearbox_type" data-tooltip="Механическая - Водитель вручную с помощью рычага сцепления и педали переключения передач. Автоматическая - Водитель не управляет сцеплением. Полуавтоматическая - Нет рычага сцепления, но есть педаль или кнопка переключения.">
+                                <select id="gearbox_type" name="gearbox_type">
                                     <option value="">-- Выберите тип --</option>
                                     <option value="Механическая">Механическая</option>
                                     <option value="Автоматическая">Автоматическая</option>
@@ -343,7 +343,7 @@
             <div class="card hidden" id="outputCard">
                 <div class="section-title">📄 Сгенерированный отчет</div>
                 <div class="output-container" id="output"></div>
-                <button type="button" class="btn btn-success mt-10 hidden" id="copyBtn" data-tooltip="Скопировать текст отчета в буфер обмена">📋 Скопировать отчет</button>
+                <button type="button" class="btn btn-success mt-10 hidden" id="copyBtn">📋 Копировать отчет для соцсетей</button>
             </div>
         </div>
 
@@ -537,7 +537,7 @@
                 <div class="output-container modal-output" id="modalOutput"></div>
             </div>
             <div class="modal-actions">
-                <button class="btn btn-secondary" id="copyModalReport" data-tooltip="Скопировать текст отчета в буфер обмена">📋 Копировать</button>
+                <button class="btn btn-secondary" id="copyModalReport">📋 Копировать отчет для соцсетей</button>
                 <button class="btn" id="closeModal">Закрыть</button>
             </div>
         </div>
