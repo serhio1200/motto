@@ -1,142 +1,71 @@
-// Дополнения к существующему коду
+// Константы и типы
+const STORAGE_KEYS = {
+    reports: 'motodiag_reports',
+    inspections: 'motodiag_inspections',
+    form: 'motodiag_form',
+    settings: 'motodiag_settings',
+};
 
-app.modules.enhancedForm = (function() {
-    // База данных марок и моделей
-    const motorcycleDatabase = {
-        "Honda": ["CB125F", "CB300R", "CB500X", "CB650R", "CBR500R", "CBR650R", "CBR1000RR-R Fireblade", /* ... полный список */],
-        "Yamaha": ["MT-07", "MT-09", "MT-10", "YZF-R1", "YZF-R6", "YZF-R3", "XMAX", "TMAX", /* ... полный список */],
-        // ... все остальные марки из вашего списка
-    };
+const BRANDS = [
+    'Honda', 'Yamaha', 'Kawasaki', 'Suzuki', 'Harley-Davidson', 'BMW', 
+    'KTM', 'Ducati', 'Triumph', 'Royal Enfield', 'Kymco', 'CFMoto', 
+    'Sym', 'Bajaj', 'TVS', 'Benelli', 'Moto Guzzi', 'MV Agusta', 
+    'Aprilia', 'Gas Gas', 'Sherco', 'Beta', 'Zero', 'Indian', 
+    'Husqvarna', 'Brough Superior', 'Bimota', 'Cagiva', 'Gilera', 
+    'Polaris', 'BRP', 'Loncin', 'Lifan', 'Zongshen', 'Hyosung', 
+    'UM', 'AJP', 'Aermacchi', 'AJS', 'Alfer', 'American IronHorse', 
+    'Apollo', 'Arch Motorcycle', 'Arctic Leopard', 'Arlen Ness', 
+    'Asiawing', 'Aston Martin', 'Ataki', 'Aurus', 'Avantis', 'BSE', 
+    'Bashan', 'Big Bear Choppers', 'Borile', 'Boss Hoss', 'Brabus', 
+    'Brammo', 'Buell', 'Bultaco', 'CCM', 'Confederate', 'Curtiss', 
+    'Daelim', 'Derbi', 'Dnepr', 'EBR', 'Ecoget', 'Ecosse', 
+    'Energica', 'Excelsior-Henderson', 'Fantic', 'Fischer', 'Fosti', 
+    'Ghezzi & Brian', 'Groza', 'Hercules', 'Horex', 'Irbis', 'IZH', 
+    'Jawa', 'Keeway', 'Kreidler', 'Laverda', 'Maico', 'Malaguti', 
+    'Matchless', 'Megelli', 'Minsk', 'Moto Morini', 'MZ', 'Norton', 
+    'Oset', 'Ossa', 'Patron', 'Peugeot', 'Pitster Pro', 'Puch', 
+    'QJ Motor', 'Rieju', 'Rokon', 'Sachs', 'Simson', 'Stark Future', 
+    'Stels', 'Super Soco', 'Sur-ron', 'SWM', 'TM Racing', 'Tomos', 
+    'Ural', 'Vepr', 'Vertigo', 'Voge', 'Von Dutch', 'Zundapp', 
+    'Zweirad-Union', 'Cleveland Cyclewerks', 'Другая марка'
+];
 
-    // Данные для тултипов
-    const tooltips = {
-        motorcycle_class: `
-            <strong>Классы мотоциклов:</strong><br><br>
-            <strong>Спортивные (Sport):</strong> Для скорости и резкой езды по асфальту, агрессивная посадка.<br>
-            <strong>Голые (Naked):</strong> Мотоциклы без обтекателей, с прямой посадкой, для города и активной езды.<br>
-            <strong>Круизеры / Чопперы:</strong> Низкая посадка, для неспешной езды по трассе, акцент на стиле.<br>
-            <!-- ... остальные классы ... -->
-        `,
-        transmission_type: `
-            <strong>Типы коробок передач:</strong><br><br>
-            <strong>Механическая:</strong> Водитель вручную с помощью рычага сцепления и педали переключения передач.<br>
-            <strong>Автоматическая:</strong> Водитель не управляет сцеплением (Honda DCT, скутеры с вариатором).<br>
-            <strong>Полуавтоматическая:</strong> У мотоцикла нет рычага сцепления, но есть педаль или кнопка переключения.<br>
-        `,
-        // ... остальные тултипы
-    };
-
-    function init() {
-        initializeBrands();
-        initializeTooltips();
-        setupMileageConversion();
-        setupAuctionFields();
-        setupFileUpload();
-    }
-
-    function initializeBrands() {
-        const brandSelect = document.getElementById('brand');
-        if (!brandSelect) return;
-
-        // Очищаем и заполняем список марок
-        brandSelect.innerHTML = '<option value="">-- Выберите марку --</option>';
-        
-        Object.keys(motorcycleDatabase).sort().forEach(brand => {
-            const option = document.createElement('option');
-            option.value = brand;
-            option.textContent = brand;
-            brandSelect.appendChild(option);
-        });
-
-        // Добавляем опцию "Другая марка"
-        const otherOption = document.createElement('option');
-        otherOption.value = 'Другая марка';
-        otherOption.textContent = 'Другая марка';
-        brandSelect.appendChild(otherOption);
-    }
-
-    function setupMileageConversion() {
-        const mileageInput = document.getElementById('mileage');
-        const mileageUnit = document.getElementById('mileage_unit');
-        const conversionDisplay = document.getElementById('mileageConversion');
-
-        if (!mileageInput || !mileageUnit || !conversionDisplay) return;
-
-        function updateConversion() {
-            const value = parseFloat(mileageInput.value);
-            if (isNaN(value)) {
-                conversionDisplay.textContent = '';
-                return;
-            }
-
-            if (mileageUnit.value === 'km') {
-                const miles = (value * 0.621371).toFixed(1);
-                conversionDisplay.textContent = `${miles} тыс. миль`;
-            } else {
-                const km = (value * 1.60934).toFixed(1);
-                conversionDisplay.textContent = `${km} тыс. км`;
-            }
-        }
-
-        mileageInput.addEventListener('input', updateConversion);
-        mileageUnit.addEventListener('change', updateConversion);
-    }
-
-    function setupAuctionFields() {
-        const auctionType = document.getElementById('auction_type');
-        const auctionFields = document.getElementById('auctionFields');
-
-        if (!auctionType || !auctionFields) return;
-
-        auctionType.addEventListener('change', function() {
-            const showFields = this.value === 'Аукцион Японии' || this.value === 'Аукцион США (битый)';
-            auctionFields.classList.toggle('hidden', !showFields);
-        });
-    }
-
-    function setupFileUpload() {
-        const fileInput = document.getElementById('document_upload');
-        const filesList = document.getElementById('uploaded_files');
-
-        if (!fileInput || !filesList) return;
-
-        fileInput.addEventListener('change', function(e) {
-            filesList.innerHTML = '';
-            Array.from(e.target.files).forEach((file, index) => {
-                const fileItem = document.createElement('div');
-                fileItem.className = 'uploaded-file-item';
-                fileItem.innerHTML = `
-                    <span>${file.name}</span>
-                    <button type="button" onclick="removeFile(${index})">🗑️</button>
-                `;
-                filesList.appendChild(fileItem);
-            });
-        });
-    }
-
-    function removeFile(index) {
-        // Логика удаления файла из списка
-        const fileInput = document.getElementById('document_upload');
-        const files = Array.from(fileInput.files);
-        files.splice(index, 1);
-        
-        // Создаем новый FileList (это упрощенная версия, в реальности нужно использовать DataTransfer)
-        const dt = new DataTransfer();
-        files.forEach(file => dt.items.add(file));
-        fileInput.files = dt.files;
-        
-        // Обновляем список
-        setupFileUpload();
-    }
-
-    return {
-        init,
-        motorcycleDatabase,
-        tooltips
-    };
-})();
-
-// Инициализация нового модуля
-document.addEventListener('DOMContentLoaded', function() {
-    app.modules.enhancedForm.init();
-});
+const MODELS_BY_BRAND = {
+    Honda: [
+        'CB125F', 'CB300R', 'CB500X', 'CB650R', 'CBR500R', 'CBR650R', 
+        'CBR1000RR-R Fireblade', 'CRF300L', 'CRF450R', 'Africa Twin', 
+        'Gold Wing', 'Rebel 500', 'Rebel 1100', 'PCX160', 'ADV160', 
+        'Forza 350', 'CT125', 'Monkey 125', 'Super Cub C125', 'NM4 Vultus', 
+        'VFR800F', 'RC213V-S', 'CRF1100L', 'CRF250R', 'CRF150R', 
+        'Wave 110', 'Dio', 'Activa 6G', 'Shine 100', 'Dream', 'Cliq', 
+        'Grazia', 'X-Blade', 'Hornet 2.0', 'SP 125', 'Unicorn', 
+        'CB200X', 'H\'Ness CB350', 'CB350 RS', 'Gold Wing Tour', 
+        'CRF450X', 'CRF250L Rally', 'CRF50F', 'XR650L', 'CBR250R', 
+        'CB1000R', 'NC750X', 'Integra', 'VFR1200F', 'VFR1200X', 
+        'CBR600RR', 'CB400 Super Four', 'CB1100', 'ST1300', 'VT750S', 
+        'Shadow Aero', 'Fury', 'Rune', 'F6B', 'Valkyrie', 'Grom', 
+        'MSX125', 'DN-01', 'NM5', 'CBR1000F', 'VTR1000F', 'CBR1100XX', 
+        'CX500', 'GL500', 'VF750', 'VFR400', 'CBR400', 'CB400SF', 
+        'CB1300', 'Bros 400', 'Bros 650', 'Revere 450', 'Transalp 450', 
+        'XL600V', 'XL700V', 'Deauville 650', 'NT700', 'Pan European', 
+        'ST1100', 'Silver Wing 600', 'PS250', 'Big Ruckus 250', 
+        'Faze 250', 'Helix 250', 'Jazz 250', 'Lead 250', 'Dylan 125', 
+        'Giorno 125', 'Joker 125', 'Today 50', 'Ape 50', 'Dax 125', 
+        'Gorilla 125', 'Motra 125', 'Motocompacto', 'Gyro', 'Gyro Canopy', 
+        'Street 750', 'Steed 400'
+    ],
+    Yamaha: [
+        'MT-07', 'MT-09', 'YZF-R1', 'YZF-R6', 'YZF-R3', 'XMAX', 
+        'TMAX', 'Tracer 9', 'XSR900', 'Bolt', 'VMAX', 'WR250R', 
+        'XT250', 'Super Ténéré', 'Niken', 'TW200', 'SR400', 'FJR1300', 
+        'V-Star 250', 'V-Star 650', 'V-Star 950', 'Road Star', 'Raider', 
+        'Stryker', 'Star Venture', 'YZ450F', 'YZ250F', 'YZ125', 
+        'PW50', 'TT-R50', 'TT-R110', 'TT-R125', 'XT125', 'XT660', 
+        'XT1200Z', 'XJ6', 'FZ6', 'FZ1', 'FJR1300A', 'FZ8', 'FZ-09', 
+        'FZ-07', 'XSR700', 'XSR900', 'TDM900', 'TRX850', 'TZR250', 
+        'RZ350', 'RD350', 'XS650', 'XJ650', 'XJ750', 'XJ900', 'XJ1100', 
+        'Virago 250', 'Virago 535', 'Virago 750', 'Virago 1100', 
+        'DragStar 400', 'DragStar 650', 'DragStar 1100', 'Royal Star', 
+        'Venture', 'Grizzly', 'Kodiak', 'Rhino', 'Wolverine', 'YFZ450', 
+        'Banshee', 'Raptor 250', 'Raptor 700', 'Blaster', 'Warrior', 
+        'Big Bear', 'Bruin', 'Griz
