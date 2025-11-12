@@ -791,6 +791,11 @@ const app = {
             }
         }
         
+        // Добавляем идентификаторы
+        if (data.vin) report += `🔢 VIN: ${data.vin}\n`;
+        if (data.engine_number) report += `⚙️ Модель / N двигателя: ${data.engine_number}\n`;
+        if (data.license_plate) report += `🚗 Гос. номер: ${data.license_plate}\n`;
+        
         if (data.motorcycle_class) report += `🏷️ Класс: ${data.motorcycle_class}\n`;
         
         // Добавляем юридическую информацию
@@ -1028,6 +1033,7 @@ const app = {
                 report.model?.toLowerCase().includes(searchValue) ||
                 (report.year && String(report.year).includes(searchValue)) ||
                 report.vin?.toLowerCase().includes(searchValue) ||
+                report.engine_number?.toLowerCase().includes(searchValue) ||
                 report.license_plate?.toLowerCase().includes(searchValue)
             );
         }).reverse();
@@ -1051,6 +1057,7 @@ const app = {
                     <div>Пробег: ${this.escapeHtml(report.mileage_km || report.mileage_miles || '0')} ${report.mileage_km ? 'тыс.км' : report.mileage_miles ? 'тыс.миль' : ''}</div>
                     <div>Цена: ${this.escapeHtml(report.price || 'Не указана')}</div>
                     <div>${report.vin ? `VIN: ${this.escapeHtml(report.vin)}` : 'VIN: Не указан'}</div>
+                    <div>${report.engine_number ? `Двигатель: ${this.escapeHtml(report.engine_number)}` : 'Двигатель: Не указан'}</div>
                     <div>${report.license_plate ? `Номер: ${this.escapeHtml(report.license_plate)}` : 'Номер: Не указан'}</div>
                     <div>Класс: ${this.escapeHtml(report.motorcycle_class || 'Не указан')}</div>
                     <div>Решение: ${this.escapeHtml(report.decision || 'Не указано')}</div>
@@ -1068,12 +1075,14 @@ const app = {
         if (!report) return;
         
         const modalVin = document.getElementById('modalVin');
+        const modalEngineNumber = document.getElementById('modalEngineNumber');
         const modalLicensePlate = document.getElementById('modalLicensePlate');
         const modalBikeInfo = document.getElementById('modalBikeInfo');
         const modalOutput = document.getElementById('modalOutput');
         const reportModal = document.getElementById('reportModal');
         
         if (modalVin) modalVin.textContent = report.vin ? this.escapeHtml(report.vin) : 'Не указан';
+        if (modalEngineNumber) modalEngineNumber.textContent = report.engine_number ? this.escapeHtml(report.engine_number) : 'Не указан';
         if (modalLicensePlate) modalLicensePlate.textContent = report.license_plate ? this.escapeHtml(report.license_plate) : 'Не указан';
         if (modalBikeInfo) modalBikeInfo.textContent = `${this.escapeHtml(report.brand)} ${this.escapeHtml(report.model)} (${this.escapeHtml(report.year)})`;
         if (modalOutput) modalOutput.textContent = report.generated_text || '';
