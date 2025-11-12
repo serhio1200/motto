@@ -1,384 +1,149 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>МотоДиагностика PRO</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div id="app">
-        <!-- Шапка -->
-        <header class="app-header">
-            <div class="header-content">
-                <div class="header-title">
-                    <h1>🏍️ МотоДиагностика PRO</h1>
-                    <p>Профессиональная диагностика и подбор мотоциклов</p>
-                </div>
-                <button id="theme-toggle" class="theme-toggle" aria-label="Переключить тему">
-                    🌙
-                </button>
-            </div>
-        </header>
-
-        <!-- Навигация -->
-        <nav class="app-nav">
-            <div class="nav-tabs">
-                <button class="nav-tab active" data-tab="report">📊 Отчет</button>
-                <button class="nav-tab" data-tab="inspections">📅 Проверки</button>
-                <button class="nav-tab" data-tab="database">🗃️ База</button>
-                <button class="nav-tab" data-tab="stats">📈 Статистика</button>
-                <button class="nav-tab" data-tab="settings">⚙️ Настройки</button>
-            </div>
-        </nav>
-
-        <!-- Основной контент -->
-        <main class="app-main">
-            <!-- Вкладка Отчет -->
-            <div id="tab-report" class="tab-content active">
-                <div class="tab-section">
-                    <h2>Создание диагностического отчета</h2>
-                    
-                    <!-- Прогресс-бар -->
-                    <div class="progress-section">
-                        <div class="progress-header">
-                            <span>Основные данные</span>
-                            <span id="basic-progress">0%</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div id="progress-bar" class="progress-fill" style="width: 0%"></div>
-                        </div>
-                        <p class="progress-hint">Заполните марку, модель и год, чтобы начать.</p>
-                    </div>
-
-                    <!-- Форма отчета -->
-                    <form id="report-form" class="report-form">
-                        <!-- Основные данные -->
-                        <section class="form-section">
-                            <h3 class="section-title">📋 Основные данные</h3>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="brand">Марка мотоцикла</label>
-                                    <select id="brand" class="form-input">
-                                        <option value="">Выберите марку</option>
-                                    </select>
-                                    <div id="brand-search" class="search-dropdown hidden"></div>
-                                    <div id="brand-custom-container" class="custom-input-container hidden">
-                                        <input type="text" id="brand-custom" class="form-input" placeholder="Введите марку">
-                                    </div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="model">Модель</label>
-                                    <select id="model" class="form-input">
-                                        <option value="">Выберите модель</option>
-                                        <option value="Другая модель">Другая модель</option>
-                                    </select>
-                                    <div id="model-search" class="search-dropdown hidden"></div>
-                                    <div id="model-custom-container" class="custom-input-container hidden">
-                                        <input type="text" id="model-custom" class="form-input" placeholder="Введите модель">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="year">Год выпуска</label>
-                                    <select id="year" class="form-input">
-                                        <option value="">Выберите год</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="mileage">Пробег</label>
-                                    <div class="mileage-input">
-                                        <input type="number" id="mileage" class="form-input" placeholder="0">
-                                        <select id="mileage-unit" class="mileage-unit">
-                                            <option value="km">тыс. км</option>
-                                            <option value="miles">миль</option>
-                                        </select>
-                                    </div>
-                                    <div id="mileage-conversion" class="conversion-hint"></div>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="vin">VIN / номер рамы</label>
-                                    <input type="text" id="vin" class="form-input" placeholder="JYARM123456789012">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="license-plate">Гос. номер</label>
-                                    <input type="text" id="license-plate" class="form-input" placeholder="А123БВ78">
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="moto-class">Класс мотоцикла</label>
-                                    <select id="moto-class" class="form-input">
-                                        <option value="">Выберите класс</option>
-                                    </select>
-                                    <div class="tooltip-content hidden" id="class-tooltip"></div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="gearbox-type">Тип коробки</label>
-                                    <select id="gearbox-type" class="form-input">
-                                        <option value="">Не указано</option>
-                                        <option value="Механическая">Механическая</option>
-                                        <option value="Автоматическая">Автоматическая</option>
-                                        <option value="Полуавтоматическая">Полуавтоматическая</option>
-                                    </select>
-                                    <div class="tooltip-content hidden" id="gearbox-tooltip"></div>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="origin-country">Происхождение мотоцикла</label>
-                                    <select id="origin-country" class="form-input">
-                                        <option value="">Не указано</option>
-                                        <option value="Россия, ПТС РФ">Россия, ПТС РФ</option>
-                                        <option value="Япония">Япония</option>
-                                        <option value="Европа">Европа</option>
-                                        <option value="США">США</option>
-                                        <option value="Другое">Другое</option>
-                                    </select>
-                                    <div class="tooltip-content hidden" id="origin-tooltip"></div>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="auction-type">Аукцион / поставка</label>
-                                    <select id="auction-type" class="form-input">
-                                        <option value="">Не указано</option>
-                                        <option value="Без аукционного листа">Без аукционного листа</option>
-                                        <option value="Аукцион Японии">Аукцион Японии</option>
-                                        <option value="Аукцион США (битый)">Аукцион США (битый)</option>
-                                        <option value="Европейский аукцион / дилер">Европейский аукцион / дилер</option>
-                                        <option value="Частник по ДКП">Частник по ДКП</option>
-                                    </select>
-                                    <div class="tooltip-content hidden" id="auction-tooltip"></div>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- Юридический блок -->
-                        <section class="form-section">
-                            <h3 class="section-title">📑 Документы и юридическая часть</h3>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="legal-checked-via">Источник проверки</label>
-                                    <select id="legal-checked-via" class="form-input">
-                                        <option value="">Не указано</option>
-                                        <option value="Автокод">Автокод</option>
-                                        <option value="Сайт ГИБДД">Сайт ГИБДД</option>
-                                        <option value="Аукционный лист">Аукционный лист</option>
-                                        <option value="Комбинированная проверка">Комбинированная проверка</option>
-                                    </select>
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="legal-status">Статус юридической чистоты</label>
-                                    <select id="legal-status" class="form-input">
-                                        <option value="">Не указано</option>
-                                        <option value="Чистый, ограничений нет">Чистый, ограничений нет</option>
-                                        <option value="Есть ограничения / аресты">Есть ограничения / аресты</option>
-                                        <option value="Есть залоги / кредиты">Есть залоги / кредиты</option>
-                                        <option value="Пробег по базам вызывает вопросы">Пробег по базам вызывает вопросы</option>
-                                        <option value="Проверка не проводилась">Проверка не проводилась</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="legal-comment">Комментарий по документам</label>
-                                <textarea id="legal-comment" class="form-input" rows="3" placeholder="Например: проверка через Автокод и ГИБДД, ограничений нет, ПТС оригинал..."></textarea>
-                            </div>
-
-                            <div class="document-actions">
-                                <button type="button" id="scan-documents" class="btn-secondary">
-                                    📷 Сканировать документы
-                                </button>
-                                <button type="button" id="auto-fill" class="btn-secondary">
-                                    🔗 Автозаполнение по ссылке
-                                </button>
-                            </div>
-                        </section>
-
-                        <!-- Финансовый блок -->
-                        <section class="form-section">
-                            <h3 class="section-title">💰 Финансовый блок</h3>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="price">Цена продавца</label>
-                                    <input type="text" id="price" class="form-input" placeholder="350 000">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="objective-price">Объективная стоимость</label>
-                                    <input type="text" id="objective-price" class="form-input" placeholder="320 000">
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="seller-discount">Ожидаемая скидка</label>
-                                    <input type="text" id="seller-discount" class="form-input" placeholder="15 000">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="investments">Оценка вложений</label>
-                                    <input type="text" id="investments" class="form-input" placeholder="20 000">
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="profitability-comment">Комментарий по рентабельности</label>
-                                <textarea id="profitability-comment" class="form-input" rows="2" placeholder="Например: на текущем рынке модель рентабельна при покупке до 320 000..."></textarea>
-                            </div>
-                        </section>
-
-                        <!-- Итоги и решение -->
-                        <section class="form-section">
-                            <h3 class="section-title">💡 Итоги и решение</h3>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="key-finding">Ключевая находка</label>
-                                    <input type="text" id="key-finding" class="form-input" placeholder="Например: отличное состояние двигателя относительно возраста">
-                                </div>
-                                
-                                <div class="form-group">
-                                    <label for="decision">Решение по мотоциклу</label>
-                                    <select id="decision" class="form-input">
-                                        <option value="">Не выбрано</option>
-                                        <option value="buy">✅ Куплен</option>
-                                        <option value="not_buy">❌ Не куплен</option>
-                                        <option value="plan_inspection">📅 Запланировать проверку</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="expert-verdict">Экспертный вердикт</label>
-                                <textarea id="expert-verdict" class="form-input" rows="3" placeholder="Ваш развёрнутый вердикт для клиента..."></textarea>
-                            </div>
-
-                            <!-- Блок планирования проверки -->
-                            <div id="inspection-plan-container" class="inspection-plan hidden">
-                                <h4>📅 Данные запланированной проверки</h4>
-                                
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="inspection-date">Дата</label>
-                                        <input type="date" id="inspection-date" class="form-input">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="inspection-time">Время</label>
-                                        <input type="time" id="inspection-time" class="form-input">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="inspection-address">Адрес проверки</label>
-                                    <input type="text" id="inspection-address" class="form-input" placeholder="г. Санкт-Петербург, улица, дом, ориентир">
-                                </div>
-
-                                <div class="form-row">
-                                    <div class="form-group">
-                                        <label for="customer-phone">Телефон заказчика</label>
-                                        <input type="tel" id="customer-phone" class="form-input" placeholder="+7 ...">
-                                    </div>
-                                    
-                                    <div class="form-group">
-                                        <label for="seller-phone">Телефон продавца</label>
-                                        <input type="tel" id="seller-phone" class="form-input" placeholder="+7 ...">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="inspection-notes">Дополнительные заметки</label>
-                                    <textarea id="inspection-notes" class="form-input" rows="2" placeholder="Особые условия сделки, пожелания клиента и т.п."></textarea>
-                                </div>
-                            </div>
-                        </section>
-
-                        <!-- Кнопки действий -->
-                        <div class="action-buttons">
-                            <div class="button-group">
-                                <button type="submit" class="btn-primary">
-                                    🔄 Сгенерировать текст отчета
-                                </button>
-                                <button type="button" id="save-report" class="btn-secondary">
-                                    💾 Сохранить в базу
-                                </button>
-                            </div>
-                            <div class="button-group">
-                                <button type="button" id="print-report" class="btn-secondary">
-                                    📄 Печать и PDF для клиента
-                                </button>
-                                <button type="button" id="clear-form" class="btn-warning">
-                                    🗑️ Очистить форму
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
-                <!-- Сгенерированный отчет -->
-                <div class="tab-section">
-                    <h3 class="section-title">📄 Сгенерированный текст для поста</h3>
-                    <div id="generated-report-container" class="hidden">
-                        <div id="generated-report" class="generated-text"></div>
-                        <div class="report-actions">
-                            <button id="copy-report" class="btn-secondary">📋 Скопировать текст</button>
-                        </div>
-                    </div>
-                    <p id="no-report-message" class="hint-text">
-                        После заполнения формы нажмите Сгенерировать, чтобы увидеть здесь итоговый текст для соцсетей и мессенджеров.
-                    </p>
-                </div>
-            </div>
-
-            <!-- Остальные вкладки -->
-            <div id="tab-database" class="tab-content">
-                <div class="tab-section">
-                    <h3>🗃️ База отчетов</h3>
-                    <!-- Содержимое базы -->
-                </div>
-            </div>
-
-            <div id="tab-settings" class="tab-content">
-                <div class="tab-section">
-                    <h3>⚙️ Настройки</h3>
-                    <!-- Содержимое настроек -->
-                </div>
-            </div>
-        </main>
-
-        <!-- Модальные окна -->
-        <div id="modal-overlay" class="modal-overlay hidden">
-            <div id="document-scanner-modal" class="modal hidden">
-                <div class="modal-header">
-                    <h3>📷 Сканирование документов</h3>
-                    <button class="modal-close">&times;</button>
-                </div>
-                <div class="modal-content">
-                    <p>Функция сканирования документов будет доступна в следующем обновлении.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Уведомления -->
-        <div id="toasts" class="toast-container"></div>
+<!-- Основные данные -->
+<div class="section-title">📋 Основные данные</div>
+<div class="card">
+  <!-- Строка 1: Марка и Модель -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="brand">Марка мотоцикла</label>
+      <select id="brand" name="brand" required>
+        <option value="">-- Выберите марку --</option>
+        <option value="Honda">Honda</option>
+        <option value="Yamaha">Yamaha</option>
+        <option value="Kawasaki">Kawasaki</option>
+        <option value="Suzuki">Suzuki</option>
+        <option value="Harley-Davidson">Harley-Davidson</option>
+        <option value="BMW">BMW</option>
+        <option value="KTM">KTM</option>
+        <option value="Ducati">Ducati</option>
+        <option value="Triumph">Triumph</option>
+        <option value="Royal Enfield">Royal Enfield</option>
+        <option value="Kymco">Kymco</option>
+        <option value="CFMoto">CFMoto</option>
+        <option value="Sym">Sym</option>
+        <option value="Bajaj">Bajaj</option>
+        <option value="TVS">TVS</option>
+        <option value="Benelli">Benelli</option>
+        <option value="Moto Guzzi">Moto Guzzi</option>
+        <option value="MV Agusta">MV Agusta</option>
+        <option value="Aprilia">Aprilia</option>
+        <option value="Gas Gas">Gas Gas</option>
+        <option value="Sherco">Sherco</option>
+        <option value="Beta">Beta</option>
+        <option value="Zero">Zero</option>
+        <option value="Indian">Indian</option>
+        <option value="Husqvarna">Husqvarna</option>
+        <!-- Другие марки будут добавлены позже -->
+        <option value="Другая марка">Другая марка</option>
+      </select>
+      <input type="text" id="brand_custom" name="brand_custom" placeholder="Введите марку" class="hidden mt-10">
     </div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+    <div class="form-group">
+      <label for="model">Модель</label>
+      <select id="model" name="model" required>
+        <option value="">-- Сначала выберите марку --</option>
+      </select>
+      <input type="text" id="model_custom" name="model_custom" placeholder="Введите модель" class="hidden mt-10">
+    </div>
+  </div>
+
+  <!-- Строка 2: Год выпуска и Пробег -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="year">Год выпуска</label>
+      <input type="number" id="year" name="year" placeholder="2020" min="1970" max="2030" value="2020" required>
+    </div>
+
+    <div class="form-group">
+      <label for="mileage_km">Пробег (км)</label>
+      <input type="number" id="mileage_km" name="mileage_km" placeholder="15000" step="1" min="0">
+      <div id="mileage_miles_display" class="text-center" style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;"></div>
+    </div>
+    
+    <div class="form-group">
+      <label for="mileage_miles">Пробег (мили)</label>
+      <input type="number" id="mileage_miles" name="mileage_miles" placeholder="9320" step="1" min="0">
+      <div id="mileage_km_display" class="text-center" style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;"></div>
+    </div>
+  </div>
+
+  <!-- Строка 3: VIN/номер рамы, Номер двигателя, Гос. номер -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="vin">VIN / Номер рамы</label>
+      <input type="text" id="vin" name="vin" placeholder="ZAB12345678901234" 
+             pattern="[A-HJ-NPR-Z0-9]{17}" 
+             title="17-значный VIN номер (только буквы и цифры)">
+    </div>
+    
+    <div class="form-group">
+      <label for="engine_number">Номер двигателя</label>
+      <input type="text" id="engine_number" name="engine_number" placeholder="ABC123456789">
+    </div>
+    
+    <div class="form-group">
+      <label for="license_plate">Гос. номер</label>
+      <input type="text" id="license_plate" name="license_plate" placeholder="А123БВ77">
+    </div>
+  </div>
+
+  <!-- Строка 4: Класс мотоцикла и Тип коробки -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="motorcycle_class">Класс мотоцикла</label>
+      <select id="motorcycle_class" name="motorcycle_class">
+        <option value="">-- Выберите класс --</option>
+        <option value="Спортивные (Sport)" data-tooltip="Для скорости и резкой езды по асфальту, агрессивная посадка">Спортивные (Sport)</option>
+        <option value="Голые (Naked)" data-tooltip="Мотоциклы без обтекателей, с прямой посадкой, для города и активной езды">Голые (Naked)</option>
+        <option value="Круизеры / Чопперы" data-tooltip="Низкая посадка, для неспешной езды по трассе, акцент на стиле">Круизеры / Чопперы</option>
+        <option value="Туристические (Touring)" data-tooltip="Максимальный комфорт для дальних поездок, с багажом и защитой">Туристические (Touring)</option>
+        <option value="Спорт-туризм (Sport-Touring)" data-tooltip="Гибрид спортивного и туристического, для быстрых и дальних поездок">Спорт-туризм (Sport-Touring)</option>
+        <option value="Классика / Ретро (Classic)" data-tooltip="Внешний вид в стиле мотоциклов прошлых лет">Классика / Ретро (Classic)</option>
+        <option value="Кафе-рейсеры (Cafe Racer)" data-tooltip="Ретро-стиль с спортивными элементами, низким рулем">Кафе-рейсеры (Cafe Racer)</option>
+        <option value="Мотокросс (Motocross)" data-tooltip="Для гонок по грунтовым трассам, без фар и поворотников">Мотокросс (Motocross)</option>
+        <option value="Эндуро (Enduro)" data-tooltip="Для езды по бездорожью, но с светотехникой для использования на дорогах">Эндуро (Enduro)</option>
+        <option value="Трэйл (Trail)" data-tooltip="Легкие внедорожники для неагрессивного покорения природы">Трэйл (Trail)</option>
+        <option value="Эдвенчер (Adventure)" data-tooltip="Универсальные мотоциклы для асфальта и бездорожья, часто с большим запасом хода">Эдвенчер (Adventure)</option>
+        <option value="Супермото (Supermoto)" data-tooltip="Внедорожный мотоцикл с дорожной резиной, для агрессивной езды по городу и картодрому">Супермото (Supermoto)</option>
+        <option value="Скутеры (Scooter)" data-tooltip="Автоматическая коробка передач, удобство для города">Скутеры (Scooter)</option>
+        <option value="Мопеды / Легкие мотоциклы" data-tooltip="Маленький объем двигателя, для неспешных поездок по городу">Мопеды / Легкие мотоциклы</option>
+        <option value="Электрические мотоциклы" data-tooltip="Тихие и экологичные, с мгновенной тягой">Электрические мотоциклы</option>
+      </select>
+      <div id="class_tooltip" class="tooltip" style="display: none; font-size: 0.8rem; color: var(--text-light); margin-top: 5px;"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="transmission_type">Тип коробки</label>
+      <select id="transmission_type" name="transmission_type">
+        <option value="">-- Выберите тип --</option>
+        <option value="Механическая" data-tooltip="Водитель вручную с помощью рычага сцепления (на руле) и педали переключения передач (ножной рычаг) - Подавляющее большинство мотоциклов">Механическая</option>
+        <option value="Автоматическая (DCT / Вариатор)" data-tooltip="Водитель не управляет сцеплением (нет рычага сцепление) Переключение Автоматическое или ручное по желанию - Honda DCT, скутеры с вариатором">Автоматическая (DCT / Вариатор)</option>
+        <option value="Полуавтоматическая" data-tooltip="У мотоцикла нет рычага сцепления на руле, но при этом есть педаль или кнопка, как на механической коробке - Старые мопеды, скутеры с педалями">Полуавтоматическая</option>
+      </select>
+      <div id="transmission_tooltip" class="tooltip" style="display: none; font-size: 0.8rem; color: var(--text-light); margin-top: 5px;"></div>
+    </div>
+  </div>
+
+  <!-- Строка 5: Происхождение мотоцикла и Аукцион/поставка -->
+  <div class="form-row">
+    <div class="form-group">
+      <label for="motorcycle_origin">Происхождение мотоцикла</label>
+      <select id="motorcycle_origin" name="motorcycle_origin">
+        <option value="">-- Выберите происхождение --</option>
+        <option value="Япония">Япония</option>
+        <option value="США">США</option>
+        <option value="Европа">Европа</option>
+        <option value="Китай">Китай</option>
+        <option value="Индия">Индия</option>
+        <option value="Тайвань">Тайвань</option>
+        <option value="Россия">Россия</option>
+        <option value="Другое">Другое</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="auction_supply">Аукцион/поставка</label>
+      <input type="text" id="auction_supply" name="auction_supply" placeholder="Название аукциона или поставщика">
+    </div>
+  </div>
+</div>
