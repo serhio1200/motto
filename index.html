@@ -73,37 +73,20 @@
                     <!-- Основные данные -->
                     <div class="section-title">📋 Основные данные</div>
                     <div class="card">
-                        <!-- Строка 1: Марка и Модель -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="brand">Марка мотоцикла</label>
-                                <select id="brand" name="brand" required>
+                                <select id="brand" name="brand" required data-tooltip="Выберите марку мотоцикла из списка или выберите 'Другая марка' для ввода вручную">
                                     <option value="">-- Выберите марку --</option>
                                     <option value="Honda">Honda</option>
                                     <option value="Yamaha">Yamaha</option>
                                     <option value="Kawasaki">Kawasaki</option>
                                     <option value="Suzuki">Suzuki</option>
-                                    <option value="Harley-Davidson">Harley-Davidson</option>
                                     <option value="BMW">BMW</option>
                                     <option value="KTM">KTM</option>
                                     <option value="Ducati">Ducati</option>
                                     <option value="Triumph">Triumph</option>
-                                    <option value="Royal Enfield">Royal Enfield</option>
-                                    <option value="Kymco">Kymco</option>
-                                    <option value="CFMoto">CFMoto</option>
-                                    <option value="Sym">Sym</option>
-                                    <option value="Bajaj">Bajaj</option>
-                                    <option value="TVS">TVS</option>
-                                    <option value="Benelli">Benelli</option>
-                                    <option value="Moto Guzzi">Moto Guzzi</option>
-                                    <option value="MV Agusta">MV Agusta</option>
-                                    <option value="Aprilia">Aprilia</option>
-                                    <option value="Gas Gas">Gas Gas</option>
-                                    <option value="Sherco">Sherco</option>
-                                    <option value="Beta">Beta</option>
-                                    <option value="Zero">Zero</option>
-                                    <option value="Indian">Indian</option>
-                                    <option value="Husqvarna">Husqvarna</option>
+                                    <option value="Harley-Davidson">Harley-Davidson</option>
                                     <option value="Другая марка">Другая марка</option>
                                 </select>
                                 <input type="text" id="brand_custom" name="brand_custom" placeholder="Введите марку" class="hidden mt-10">
@@ -111,36 +94,27 @@
 
                             <div class="form-group">
                                 <label for="model">Модель</label>
-                                <select id="model" name="model" required>
+                                <select id="model" name="model" required data-tooltip="Выберите модель мотоцикла из списка или выберите 'Другая модель' для ввода вручную">
                                     <option value="">-- Сначала выберите марку --</option>
                                 </select>
                                 <input type="text" id="model_custom" name="model_custom" placeholder="Введите модель" class="hidden mt-10">
                             </div>
                         </div>
 
-                        <!-- Строка 2: Год выпуска и Пробег -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="year">Год выпуска</label>
-                                <input type="number" id="year" name="year" placeholder="2020" min="1970" max="2030" value="2020" required>
+                                <input type="number" id="year" name="year" placeholder="2023" min="1990" max="2030" required>
                             </div>
 
-                            <div class="mileage-converter">
-                                <div class="mileage-group">
-                                    <label for="mileage_km">Пробег (км)</label>
-                                    <input type="number" id="mileage_km" name="mileage_km" placeholder="15000" step="1" min="0">
-                                    <div id="mileage_miles_display" class="mileage-display"></div>
-                                </div>
-                                
-                                <div class="mileage-group">
-                                    <label for="mileage_miles">Пробег (мили)</label>
-                                    <input type="number" id="mileage_miles" name="mileage_miles" placeholder="9320" step="1" min="0">
-                                    <div id="mileage_km_display" class="mileage-display"></div>
-                                </div>
+                            <div class="form-group">
+                                <label for="mileage">Пробег (тыс. км)</label>
+                                <input type="number" id="mileage" name="mileage" placeholder="15.5" step="0.1" min="0">
+                                <div class="mileage-conversion" id="mileageConversion"></div>
                             </div>
                         </div>
 
-                        <!-- Строка 3: VIN/номер рамы, Номер двигателя, Гос. номер -->
+                        <!-- VIN и гос. номер -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="vin">VIN / Номер рамы</label>
@@ -150,78 +124,72 @@
                             </div>
                             
                             <div class="form-group">
-                                <label for="engine_number">Номер двигателя</label>
-                                <input type="text" id="engine_number" name="engine_number" placeholder="ABC123456789">
-                            </div>
-                            
-                            <div class="form-group">
                                 <label for="license_plate">Гос. номер</label>
                                 <input type="text" id="license_plate" name="license_plate" placeholder="А123БВ77">
                             </div>
                         </div>
 
-                        <!-- Строка 4: Класс мотоцикла и Тип коробки -->
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="motorcycle_class">Класс мотоцикла</label>
-                                <select id="motorcycle_class" name="motorcycle_class">
+                                <select id="motorcycle_class" name="motorcycle_class" data-tooltip="Выберите класс мотоцикла для отображения подробной информации">
                                     <option value="">-- Выберите класс --</option>
-                                    <option value="Спортивные (Sport)" data-tooltip="Для скорости и резкой езды по асфальту, агрессивная посадка">Спортивные (Sport)</option>
-                                    <option value="Голые (Naked)" data-tooltip="Мотоциклы без обтекателей, с прямой посадкой, для города и активной езды">Голые (Naked)</option>
-                                    <option value="Круизеры / Чопперы" data-tooltip="Низкая посадка, для неспешной езды по трассе, акцент на стиле">Круизеры / Чопперы</option>
-                                    <option value="Туристические (Touring)" data-tooltip="Максимальный комфорт для дальних поездок, с багажом и защитой">Туристические (Touring)</option>
-                                    <option value="Спорт-туризм (Sport-Touring)" data-tooltip="Гибрид спортивного и туристического, для быстрых и дальних поездок">Спорт-туризм (Sport-Touring)</option>
-                                    <option value="Классика / Ретро (Classic)" data-tooltip="Внешний вид в стиле мотоциклов прошлых лет">Классика / Ретро (Classic)</option>
-                                    <option value="Кафе-рейсеры (Cafe Racer)" data-tooltip="Ретро-стиль с спортивными элементами, низким рулем">Кафе-рейсеры (Cafe Racer)</option>
-                                    <option value="Мотокросс (Motocross)" data-tooltip="Для гонок по грунтовым трассам, без фар и поворотников">Мотокросс (Motocross)</option>
-                                    <option value="Эндуро (Enduro)" data-tooltip="Для езды по бездорожью, но с светотехникой для использования на дорогах">Эндуро (Enduro)</option>
-                                    <option value="Трэйл (Trail)" data-tooltip="Легкие внедорожники для неагрессивного покорения природы">Трэйл (Trail)</option>
-                                    <option value="Эдвенчер (Adventure)" data-tooltip="Универсальные мотоциклы для асфальта и бездорожья, часто с большим запасом хода">Эдвенчер (Adventure)</option>
-                                    <option value="Супермото (Supermoto)" data-tooltip="Внедорожный мотоцикл с дорожной резиной, для агрессивной езды по городу и картодрому">Супермото (Supermoto)</option>
-                                    <option value="Скутеры (Scooter)" data-tooltip="Автоматическая коробка передач, удобство для города">Скутеры (Scooter)</option>
-                                    <option value="Мопеды / Легкие мотоциклы" data-tooltip="Маленький объем двигателя, для неспешных поездок по городу">Мопеды / Легкие мотоциклы</option>
-                                    <option value="Электрические мотоциклы" data-tooltip="Тихие и экологичные, с мгновенной тягой">Электрические мотоциклы</option>
+                                    <option value="Спортивные (Sport)">Спортивные (Sport)</option>
+                                    <option value="Голые (Naked)">Голые (Naked)</option>
+                                    <option value="Круизеры / Чопперы">Круизеры / Чопперы</option>
+                                    <option value="Туристические (Touring)">Туристические (Touring)</option>
+                                    <option value="Спорт-туризм (Sport-Touring)">Спорт-туризм (Sport-Touring)</option>
+                                    <option value="Классика / Ретро (Classic)">Классика / Ретро (Classic)</option>
+                                    <option value="Кафе-рейсеры (Cafe Racer)">Кафе-рейсеры (Cafe Racer)</option>
+                                    <option value="Мотокросс (Motocross)">Мотокросс (Motocross)</option>
+                                    <option value="Эндуро (Enduro)">Эндуро (Enduro)</option>
+                                    <option value="Трэйл (Trail)">Трэйл (Trail)</option>
+                                    <option value="Эдвенчер (Adventure)">Эдвенчер (Adventure)</option>
+                                    <option value="Супермото (Supermoto)">Супермото (Supermoto)</option>
+                                    <option value="Скутеры (Scooter)">Скутеры (Scooter)</option>
+                                    <option value="Мопеды / Легкие мотоциклы">Мопеды / Легкие мотоциклы</option>
+                                    <option value="Электрические мотоциклы">Электрические мотоциклы</option>
                                 </select>
-                                <div id="class_tooltip" class="tooltip"></div>
                             </div>
 
                             <div class="form-group">
-                                <label for="transmission_type">Тип коробки</label>
-                                <select id="transmission_type" name="transmission_type">
+                                <label for="gearbox_type">Тип коробки</label>
+                                <select id="gearbox_type" name="gearbox_type" data-tooltip="Механическая - Водитель вручную с помощью рычага сцепления и педали переключения передач. Автоматическая - Водитель не управляет сцеплением. Полуавтоматическая - Нет рычага сцепления, но есть педаль или кнопка переключения.">
                                     <option value="">-- Выберите тип --</option>
-                                    <option value="Механическая" data-tooltip="Водитель вручную с помощью рычага сцепления (на руле) и педали переключения передач (ножной рычаг) - Подавляющее большинство мотоциклов">Механическая</option>
-                                    <option value="Автоматическая (DCT / Вариатор)" data-tooltip="Водитель не управляет сцеплением (нет рычага сцепление) Переключение Автоматическое или ручное по желанию - Honda DCT, скутеры с вариатором">Автоматическая (DCT / Вариатор)</option>
-                                    <option value="Полуавтоматическая" data-tooltip="У мотоцикла нет рычага сцепления на руле, но при этом есть педаль или кнопка, как на механической коробке - Старые мопеды, скутеры с педалями">Полуавтоматическая</option>
+                                    <option value="Механическая">Механическая</option>
+                                    <option value="Автоматическая">Автоматическая</option>
+                                    <option value="Полуавтоматическая">Полуавтоматическая</option>
                                 </select>
-                                <div id="transmission_tooltip" class="tooltip"></div>
                             </div>
                         </div>
 
-                        <!-- Строка 5: Происхождение мотоцикла и Аукцион/поставка -->
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="motorcycle_origin">Происхождение мотоцикла</label>
-                                <select id="motorcycle_origin" name="motorcycle_origin">
+                                <label for="origin_country">Происхождение мотоцикла</label>
+                                <select id="origin_country" name="origin_country" data-tooltip="Дилерский ПТС РФ - Официальный ввоз в Россию. Япония - Для внутреннего японского рынка. Европа - Для европейского рынка. США / Аукцион - Для североамериканского рынка.">
                                     <option value="">-- Выберите происхождение --</option>
+                                    <option value="Дилерский ПТС РФ">Дилерский ПТС РФ</option>
                                     <option value="Япония">Япония</option>
-                                    <option value="США">США</option>
                                     <option value="Европа">Европа</option>
-                                    <option value="Китай">Китай</option>
-                                    <option value="Индия">Индия</option>
-                                    <option value="Тайвань">Тайвань</option>
-                                    <option value="Россия">Россия</option>
+                                    <option value="США / Аукцион">США / Аукцион</option>
                                     <option value="Другое">Другое</option>
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label for="auction_supply">Аукцион/поставка</label>
-                                <input type="text" id="auction_supply" name="auction_supply" placeholder="Название аукциона или поставщика">
+                                <label for="auction_type">Аукцион / поставка</label>
+                                <select id="auction_type" name="auction_type" data-tooltip="Без аукционного листа - Покупка у частного перекупщика. Аукцион Японии/США - С аукционным листом. Европейский / дилер - Покупка у официального дилера. Частник по ДКП - Прямая покупка у владельца.">
+                                    <option value="">-- Выберите тип --</option>
+                                    <option value="Без аукционного листа">Без аукционного листа</option>
+                                    <option value="Аукцион Японии">Аукцион Японии</option>
+                                    <option value="Аукцион США (битый)">Аукцион США (битый)</option>
+                                    <option value="Европейский / дилер">Европейский / дилер</option>
+                                    <option value="Частник по ДКП">Частник по ДКП</option>
+                                </select>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Остальная часть формы остается без изменений -->
                     <!-- Финансовые данные -->
                     <div class="section-title">💰 Финансовые данные</div>
                     <div class="card">
@@ -359,7 +327,6 @@
             </div>
         </div>
 
-        <!-- Остальные вкладки остаются без изменений -->
         <!-- Вкладка ПРОВЕРКИ -->
         <div id="inspections-tab" class="tab-content">
             <div class="card">
@@ -538,7 +505,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>📋 Просмотр отчета</h3>
-                <button class="modal-close" onclick="app.modules.report.closeReportModal()">×</button>
+                <button class="modal-close" id="modalClose">×</button>
             </div>
             <div class="modal-body">
                 <div class="report-identifiers">
@@ -549,8 +516,8 @@
                 <div class="output-container modal-output" id="modalOutput"></div>
             </div>
             <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="app.modules.report.copyModalReport()">📋 Копировать</button>
-                <button class="btn" onclick="app.modules.report.closeReportModal()">Закрыть</button>
+                <button class="btn btn-secondary" id="copyModalReport">📋 Копировать</button>
+                <button class="btn" id="closeModal">Закрыть</button>
             </div>
         </div>
     </div>
