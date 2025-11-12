@@ -746,24 +746,11 @@ const app = {
         if (data.year) report += `📅 Год выпуска: ${data.year}\n`;
         if (data.mileage) report += `🛣️ Пробег: ${data.mileage} тыс. км\n`;
         if (data.motorcycle_class) report += `🏷️ Класс: ${data.motorcycle_class}\n`;
-        if (data.legal_check) report += `📋 Юридическая проверка: ${data.legal_check}\n\n`;
         
-        report += `🔍 РЕЗУЛЬТАТЫ ДИАГНОСТИКИ:\n\n`;
-        
-        const ratings = {
-            '👁️ Внешний вид': data.appearance_rating,
-            '⚙️ Двигатель/КПП': data.engine_rating,
-            '🔌 Электрооборудование': data.electronics_rating,
-            '🛠️ Подвеска': data.suspension_rating
-        };
-        
-        Object.entries(ratings).forEach(([label, rating]) => {
-            if (rating) {
-                const r = parseInt(rating, 10);
-                const stars = '★'.repeat(r) + '☆'.repeat(5 - r);
-                report += `${label}: ${stars}\n`;
-            }
-        });
+        // Добавляем юридическую информацию
+        if (data.legal_check) report += `📋 Юридическая проверка: ${data.legal_check}\n`;
+        if (data.legal_status) report += `⚖️ Статус: ${data.legal_status}\n`;
+        if (data.legal_comment) report += `📝 Комментарий: ${data.legal_comment}\n`;
         
         report += `\n💼 ВЫВОДЫ:\n`;
         if (data.key_finding) report += `🔑 Ключевая находка: ${data.key_finding}\n`;
