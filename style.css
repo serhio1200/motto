@@ -1,4 +1,4 @@
-/* Добавьте эти стили в конец файла style.css *//* style.css - Внешний вид приложения МотоДиагностика PRO */
+/* style.css - Внешний вид приложения МотоДиагностика PRO */
 
 /* Переменные цветов для светлой и темной темы */
 :root {
@@ -435,21 +435,71 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
 }
 
 /* Модальное окно отчёта */
-.modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.7); display:flex; align-items:center; justify-content:center; z-index:10000; padding:20px; }
+.modal { 
+    position: fixed; 
+    top:0; left:0; 
+    width:100%; height:100%; 
+    background: rgba(0,0,0,0.7); 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+    z-index:10000; 
+    padding:20px; 
+}
 .modal.hidden { display: none; }
 .modal-content {
-    background: var(--card-bg); border-radius: 20px; width: 100%; max-width: 600px; max-height: 90vh; overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.3); animation: modalSlideIn 0.3s ease;
+    background: var(--card-bg); 
+    border-radius: 20px; 
+    width: 100%; 
+    max-width: 600px; 
+    max-height: 90vh; 
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3); 
+    animation: modalSlideIn 0.3s ease;
 }
-@keyframes modalSlideIn { from { opacity:0; transform: translateY(-50px) scale(0.9);} to { opacity:1; transform: translateY(0) scale(1);} }
-.modal-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; border-bottom: 1px solid var(--border-color); background: var(--primary-color); color: white; }
+@keyframes modalSlideIn { 
+    from { opacity:0; transform: translateY(-50px) scale(0.9);} 
+    to { opacity:1; transform: translateY(0) scale(1);} 
+}
+.modal-header { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 20px; 
+    border-bottom: 1px solid var(--border-color); 
+    background: var(--primary-color); 
+    color: white; 
+}
 .modal-header h3 { margin:0; font-size:1.2rem; }
-.modal-close { background:none; border:none; color:white; font-size:24px; cursor:pointer; width:30px; height:30px; display:flex; align-items:center; justify-content:center; }
+.modal-close { 
+    background:none; 
+    border:none; 
+    color:white; 
+    font-size:24px; 
+    cursor:pointer; 
+    width:30px; 
+    height:30px; 
+    display:flex; 
+    align-items:center; 
+    justify-content:center; 
+}
 .modal-body { padding:20px; max-height:60vh; overflow-y:auto; }
 .modal-actions { padding:20px; border-top:1px solid var(--border-color); display:flex; gap:10px; }
 
-.report-identifiers { background: rgba(99,102,241,0.05); border-radius:12px; padding:16px; margin-bottom:16px; border:2px solid var(--primary-color); }
-.identifier-item { display:flex; justify-content:space-between; margin-bottom:8px; padding:8px 0; border-bottom:1px solid var(--border-color); }
+.report-identifiers { 
+    background: rgba(99,102,241,0.05); 
+    border-radius:12px; 
+    padding:16px; 
+    margin-bottom:16px; 
+    border:2px solid var(--primary-color); 
+}
+.identifier-item { 
+    display:flex; 
+    justify-content:space-between; 
+    margin-bottom:8px; 
+    padding:8px 0; 
+    border-bottom:1px solid var(--border-color); 
+}
 .identifier-item:last-child { margin-bottom:0; border-bottom:none; }
 
 /* Toast */
@@ -500,165 +550,26 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
 }
 .save-indicator.visible { opacity: 1; transform: translateY(0); }
 
-/* НОВЫЕ СТИЛИ ДЛЯ ОБНОВЛЕННОЙ ФОРМЫ */
-
-/* Стили для конвертера пробега */
-.mileage-converter {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.mileage-group {
-  position: relative;
-}
-
-.mileage-display {
-  font-size: 0.75rem;
-  color: var(--text-light);
-  margin-top: 4px;
-  text-align: center;
-  background: rgba(99, 102, 241, 0.05);
-  padding: 4px 8px;
-  border-radius: 6px;
-  border: 1px solid var(--border-color);
-}
-
-/* Стили для подсказок */
+/* Tooltip */
 .tooltip {
-  display: none;
-  background: var(--card-bg);
-  border: 1px solid var(--primary-color);
-  border-radius: 8px;
-  padding: 10px 12px;
-  margin-top: 8px;
-  font-size: 0.8rem;
-  color: var(--text-color);
-  box-shadow: var(--shadow);
-  animation: fadeIn 0.3s ease;
-  position: relative;
-  z-index: 10;
+    position: fixed;
+    background: var(--card-bg);
+    color: var(--text-color);
+    padding: 12px 16px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-hover);
+    border: 1px solid var(--border-color);
+    max-width: 300px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    z-index: 10003;
+    pointer-events: none;
 }
 
-.tooltip::before {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: 20px;
-  width: 10px;
-  height: 10px;
-  background: var(--card-bg);
-  border-left: 1px solid var(--primary-color);
-  border-top: 1px solid var(--primary-color);
-  transform: rotate(45deg);
-}
-
-/* Анимация появления подсказки */
-@keyframes tooltipFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-5px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.tooltip.show {
-  display: block;
-  animation: tooltipFadeIn 0.3s ease;
-}
-
-/* Специфические стили для новых полей */
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-/* Стили для обязательных полей */
-label[for]:required::after {
-  content: " *";
-  color: var(--danger-color);
-}
-
-/* Стили для индикаторов загрузки данных */
-.loading-indicator {
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  border: 2px solid var(--border-color);
-  border-top: 2px solid var(--primary-color);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-left: 8px;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Стили для улучшенного скролла в выпадающих списках */
-select option {
-  padding: 8px 12px;
-  border-bottom: 1px solid var(--border-color);
-}
-
-select option:hover {
-  background: var(--primary-color);
-  color: white;
-}
-
-/* Стили для группировки опций в выпадающих списках */
-optgroup {
-  font-weight: 600;
-  color: var(--primary-color);
-  background: var(--bg-color);
-}
-
-optgroup option {
-  font-weight: normal;
-  color: var(--text-color);
-  padding-left: 20px;
-}
-
-/* Адаптивность для новых полей */
-@media (max-width: 768px) {
-  .mileage-converter {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-  
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 480px) {
-  .mileage-display {
-    font-size: 0.7rem;
-    padding: 3px 6px;
-  }
-  
-  .tooltip {
+/* Конвертер пробега */
+.mileage-conversion {
     font-size: 0.75rem;
-    padding: 8px 10px;
-  }
-}
-
-@media (max-width: 380px) {
-  .form-row {
-    gap: 12px;
-  }
-  
-  .mileage-converter {
-    gap: 8px;
-  }
+    color: var(--text-light);
+    margin-top: 4px;
+    font-style: italic;
 }
