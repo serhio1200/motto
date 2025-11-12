@@ -108,6 +108,11 @@ const app = {
                 description: "Тихие и экологичные, с мгновенной тягой.",
                 examples: ["Zero SR/F", "Energica Ego", "Harley-Davidson LiveWire"]
             }
+        },
+        gearboxTypes: {
+            "Механическая": "Водитель вручную с помощью рычага сцепления (на руле) и педали переключения передач (ножной рычаг). Подавляющее большинство мотоциклов.",
+            "Автоматическая": "Водитель не управляет сцеплением (нет рычага сцепление). Переключение автоматическое или ручное по желанию. Honda DCT, скутеры с вариатором.",
+            "Полуавтоматическая": "У мотоцикла нет рычага сцепления на руле, но при этом есть педаль или кнопка, как на механической коробке. Старые мопеды, скутеры с педалями."
         }
     },
     state: {
@@ -499,6 +504,38 @@ const app = {
                     showTooltip(this, `${classInfo.description}\n\nПримеры: ${classInfo.examples.join(', ')}`);
                 }
             });
+            
+            // Показываем подсказку при фокусе
+            motorcycleClassSelect.addEventListener('focus', function() {
+                const selectedClass = this.value;
+                if (selectedClass && app.config.motorcycleClasses[selectedClass]) {
+                    const classInfo = app.config.motorcycleClasses[selectedClass];
+                    showTooltip(this, `${classInfo.description}\n\nПримеры: ${classInfo.examples.join(', ')}`);
+                } else {
+                    showTooltip(this, "Выберите класс мотоцикла для просмотра подробного описания");
+                }
+            });
+        }
+        
+        // Специальная обработка для типа коробки передач
+        const gearboxTypeSelect = document.getElementById('gearbox_type');
+        if (gearboxTypeSelect) {
+            gearboxTypeSelect.addEventListener('change', function() {
+                const selectedType = this.value;
+                if (selectedType && app.config.gearboxTypes[selectedType]) {
+                    showTooltip(this, app.config.gearboxTypes[selectedType]);
+                }
+            });
+            
+            // Показываем подсказку при фокусе
+            gearboxTypeSelect.addEventListener('focus', function() {
+                const selectedType = this.value;
+                if (selectedType && app.config.gearboxTypes[selectedType]) {
+                    showTooltip(this, app.config.gearboxTypes[selectedType]);
+                } else {
+                    showTooltip(this, "Выберите тип коробки передач для просмотра подробного описания");
+                }
+            });
         }
     },
     
@@ -791,10 +828,7 @@ const app = {
             }
         }
         
-        // Добавляем идентификаторы
-        if (data.vin) report += `🔢 VIN: ${data.vin}\n`;
-        if (data.engine_number) report += `⚙️ Модель / N двигателя: ${data.engine_number}\n`;
-        if (data.license_plate) report += `🚗 Гос. номер: ${data.license_plate}\n`;
+        // Убрана информация о VIN, номере двигателя и гос. номере для соцсетей
         
         if (data.motorcycle_class) report += `🏷️ Класс: ${data.motorcycle_class}\n`;
         
@@ -940,7 +974,7 @@ const app = {
             }
             
             navigator.clipboard.writeText(text).then(() => {
-                this.showToast('Отчет скопирован в буфер обмена!', 'success');
+                this.showToast('Отчет скопирован в буфер обмена для соцсетей!', 'success');
             }).catch(() => {
                 // Fallback для старых браузеров
                 const textarea = document.createElement('textarea');
@@ -949,7 +983,7 @@ const app = {
                 textarea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
-                this.showToast('Отчет скопирован в буфер обмена!', 'success');
+                this.showToast('Отчет скопирован в буфер обмена для соцсетей!', 'success');
             });
         } catch (e) {
             console.error('Ошибка копирования:', e);
@@ -966,7 +1000,7 @@ const app = {
             }
             
             navigator.clipboard.writeText(text).then(() => {
-                this.showToast('Отчет скопирован в буфер обмена!', 'success');
+                this.showToast('Отчет скопирован в буфер обмена для соцсетей!', 'success');
             }).catch(() => {
                 const textarea = document.createElement('textarea');
                 textarea.value = text;
@@ -974,7 +1008,7 @@ const app = {
                 textarea.select();
                 document.execCommand('copy');
                 document.body.removeChild(textarea);
-                this.showToast('Отчет скопирован в буфер обмена!', 'success');
+                this.showToast('Отчет скопирован в буфер обмена для соцсетей!', 'success');
             });
         } catch (e) {
             console.error('Ошибка копирования:', e);
