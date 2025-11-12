@@ -247,6 +247,47 @@ const app = {
         localStorage.setItem('motodiag_theme', newTheme);
     },
     
+    // Функции для конвертации пробега
+    convertKmToMiles(km) {
+        return (km * 0.621371).toFixed(1);
+    },
+
+    convertMilesToKm(miles) {
+        return (miles / 0.621371).toFixed(1);
+    },
+
+    // Обработчики для полей пробега
+    initMileageFields() {
+        const mileageKm = document.getElementById('mileage_km');
+        const mileageMiles = document.getElementById('mileage_miles');
+        
+        if (!mileageKm || !mileageMiles) return;
+        
+        // Обработчик для поля км
+        mileageKm.addEventListener('input', () => {
+            const kmValue = parseFloat(mileageKm.value);
+            if (!isNaN(kmValue) && kmValue >= 0) {
+                const milesValue = this.convertKmToMiles(kmValue);
+                mileageMiles.value = milesValue;
+            } else {
+                mileageMiles.value = '';
+            }
+            this.updateProgress();
+        });
+        
+        // Обработчик для поля миль
+        mileageMiles.addEventListener('input', () => {
+            const milesValue = parseFloat(mileageMiles.value);
+            if (!isNaN(milesValue) && milesValue >= 0) {
+                const kmValue = this.convertMilesToKm(milesValue);
+                mileageKm.value = kmValue;
+            } else {
+                mileageKm.value = '';
+            }
+            this.updateProgress();
+        });
+    },
+    
     initForm() {
         // Заполнение списка моделей при выборе марки
         const brandSelect = document.getElementById('brand');
@@ -296,21 +337,8 @@ const app = {
             });
         }
         
-        // Обработчик для поля пробега (конвертация км/мили)
-        const mileageInput = document.getElementById('mileage');
-        if (mileageInput) {
-            mileageInput.addEventListener('input', function() {
-                const km = parseFloat(this.value);
-                const conversionElement = document.getElementById('mileageConversion');
-                
-                if (!isNaN(km) && km >= 0) {
-                    const miles = (km * 0.621371).toFixed(1);
-                    conversionElement.textContent = `≈ ${miles} тыс. миль`;
-                } else {
-                    conversionElement.textContent = '';
-                }
-            });
-        }
+        // Инициализация полей пробега
+        this.initMileageFields();
         
         // Обработчик для решения (показ/скрытие полей проверки)
         const decisionSelect = document.getElementById('decision');
@@ -478,11 +506,14 @@ const app = {
         const brandEl = document.getElementById('brand');
         const modelEl = document.getElementById('model');
         const yearEl = document.getElementById('year');
+        const mileageKm = document.getElementById('mileage_km');
+        const mileageMiles = document.getElementById('mileage_miles');
         
         if (!brandEl || !modelEl || !yearEl) return;
         
         let brandFilled = !!brandEl.value;
         let modelFilled = !!modelEl.value;
+        let mileageFilled = !!(mileageKm && mileageKm.value) || !!(mileageMiles && mileageMiles.value);
         
         if (brandEl.value === 'Другая марка') {
             const brandCustom = document.getElementById('brand_custom');
@@ -494,8 +525,8 @@ const app = {
             modelFilled = modelCustom && modelCustom.value.trim() !== '';
         }
         
-        const filled = (brandFilled ? 1 : 0) + (modelFilled ? 1 : 0) + (yearEl.value ? 1 : 0);
-        const progress = (filled / 3) * 100;
+        const filled = (brandFilled ? 1 : 0) + (modelFilled ? 1 : 0) + (yearEl.value ? 1 : 0) + (mileageFilled ? 1 : 0);
+        const progress = (filled / 4) * 100;
         
         const progressFill = document.getElementById('progressFill');
         const progressText = document.getElementById('progressText');
@@ -506,7 +537,7 @@ const app = {
                 progressText.textContent = '✅ Все основные данные заполнены!';
                 progressText.style.color = 'var(--success-color)';
             } else {
-                progressText.textContent = `Заполнено ${filled} из 3 основных полей`;
+                progressText.textContent = `Заполнено ${filled} из 4 основных полей`;
                 progressText.style.color = 'var(--text-light)';
             }
         }
@@ -744,7 +775,22 @@ const app = {
         
         report += `🏍️ ${brand} ${model}\n`;
         if (data.year) report += `📅 Год выпуска: ${data.year}\n`;
-        if (data.mileage) report += `🛣️ Пробег: ${data.mileage} тыс. км\n`;
+        
+        // Отображение пробега в обеих единицах
+        if (data.mileage_km) {
+            const km = parseFloat(data.mileage_km);
+            if (!isNaN(km)) {
+                const miles = this.convertKmToMiles(km);
+                report += `🛣️ Пробег: ${km} тыс. км (${miles} тыс. миль)\n`;
+            }
+        } else if (data.mileage_miles) {
+            const miles = parseFloat(data.mileage_miles);
+            if (!isNaN(miles)) {
+                const km = this.convertMilesToKm(miles);
+                report += `🛣️ Пробег: ${miles} тыс. миль (${km} тыс. км)\n`;
+            }
+        }
+        
         if (data.motorcycle_class) report += `🏷️ Класс: ${data.motorcycle_class}\n`;
         
         // Добавляем юридическую информацию
@@ -862,14 +908,12 @@ const app = {
         const inspectionFields = document.getElementById('inspectionFields');
         const brandCustom = document.getElementById('brand_custom');
         const modelCustom = document.getElementById('model_custom');
-        const mileageConversion = document.getElementById('mileageConversion');
         
         if (outputCard) outputCard.classList.add('hidden');
         if (savingsAlert) savingsAlert.classList.add('hidden');
         if (inspectionFields) inspectionFields.classList.add('hidden');
         if (brandCustom) brandCustom.classList.add('hidden');
         if (modelCustom) modelCustom.classList.add('hidden');
-        if (mileageConversion) mileageConversion.textContent = '';
         
         // Сбрасываем список моделей
         const brandSelect = document.getElementById('brand');
@@ -1004,7 +1048,7 @@ const app = {
                     </div>
                 </div>
                 <div class="report-meta">
-                    <div>Пробег: ${this.escapeHtml(report.mileage || '0')} тыс.км</div>
+                    <div>Пробег: ${this.escapeHtml(report.mileage_km || report.mileage_miles || '0')} ${report.mileage_km ? 'тыс.км' : report.mileage_miles ? 'тыс.миль' : ''}</div>
                     <div>Цена: ${this.escapeHtml(report.price || 'Не указана')}</div>
                     <div>${report.vin ? `VIN: ${this.escapeHtml(report.vin)}` : 'VIN: Не указан'}</div>
                     <div>${report.license_plate ? `Номер: ${this.escapeHtml(report.license_plate)}` : 'Номер: Не указан'}</div>
