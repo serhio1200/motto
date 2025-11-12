@@ -213,6 +213,63 @@ input:focus, select:focus, textarea:focus {
     transform: translateY(-2px);
 }
 
+/* Стили для двойного поля пробега */
+.mileage-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.mileage-input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mileage-input-group input {
+    width: 100%;
+    padding: 14px;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    font-size: 16px;
+    background: var(--card-bg);
+    color: var(--text-color);
+    transition: all 0.3s ease;
+}
+
+.mileage-input-group input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.mileage-label {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    text-align: center;
+    font-weight: 500;
+}
+
+.mileage-separator {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    font-weight: bold;
+    padding: 0 8px;
+}
+
+@media (max-width: 480px) {
+    .mileage-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+    
+    .mileage-separator {
+        transform: rotate(90deg);
+        padding: 4px 0;
+    }
+}
+
 /* Кнопки */
 .btn {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
