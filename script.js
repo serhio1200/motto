@@ -68,4 +68,73 @@ const MODELS_BY_BRAND = {
         'DragStar 400', 'DragStar 650', 'DragStar 1100', 'Royal Star', 
         'Venture', 'Grizzly', 'Kodiak', 'Rhino', 'Wolverine', 'YFZ450', 
         'Banshee', 'Raptor 250', 'Raptor 700', 'Blaster', 'Warrior', 
-        'Big Bear', 'Bruin', 'Griz
+        'Big Bear', 'Bruin', 'Grizzy', 'Kodiak'
+    ],
+    Kawasaki: [
+        'Ninja ZX-10R', 'Ninja 650', 'Z900', 'Versys 650', 'Vulcan S', 
+        'KLX230', 'Ninja 400', 'Z400', 'Ninja 300', 'Z300', 'Ninja 250', 
+        'Z250', 'Ninja 125', 'Z125', 'Versys 1000', 'Vulcan 900', 
+        'Vulcan 1700', 'Concours 14', 'KLR650', 'KLX300', 'KLX140', 
+        'KLX110', 'KX450', 'KX250', 'KX100', 'KX65', 'Brute Force', 
+        'Mule', 'Teryx', 'Prairie', 'Bayou', 'Lakota', 'KFX', 'Jet Ski'
+    ],
+    Suzuki: [
+        'GSX-R1000', 'GSX-R750', 'GSX-S1000', 'V-Strom 650', 'SV650', 
+        'Hayabusa', 'GSX-R600', 'GSX-R125', 'GSX-S750', 'V-Strom 1050', 
+        'Boulevard M109R', 'Boulevard C50', 'Boulevard S40', 'DR-Z400', 
+        'DR650', 'VanVan 200', 'Address', 'Burgman', 'Skywave', 'Gemma', 
+        'Lets', 'UZ', 'GR', 'RA', 'ST', 'GT', 'TS', 'RM-Z', 'QuadSport', 
+        'KingQuad', 'Eiger'
+    ],
+    'Harley-Davidson': [
+        'Street Glide', 'Sportster', 'Fat Boy', 'Softail', 'Pan America', 
+        'Road King', 'Electra Glide', 'Road Glide', 'Breakout', 
+        'Low Rider', 'Fat Bob', 'Street Bob', 'Iron 883', 'Forty-Eight', 
+        'Roadster', 'SuperLow', '1200 Custom', 'Nightster', 'Forty-Eight Special', 
+        'Softail Slim', 'Deluxe', 'Heritage Classic', 'Fat Boy Special', 
+        'Breakout 114', 'Low Rider S', 'Street Bob 114', 'Fat Bob 114', 
+        'Sport Glide', 'Softail Standard', 'CVO Street Glide', 'CVO Road Glide', 
+        'CVO Limited', 'Tri Glide Ultra', 'Freewheeler', 'LiveWire'
+    ],
+    BMW: [
+        'S1000RR', 'R1250GS', 'F900R', 'R18', 'C400X', 'R1250RT', 
+        'R1250R', 'R1250RS', 'F850GS', 'F750GS', 'G310R', 'G310GS', 
+        'K1600GT', 'K1600B', 'R nineT', 'R18 Classic', 'R18 B', 
+        'R18 Transcontinental', 'C400GT', 'C650GT', 'C evolution'
+    ],
+    KTM: [
+        '1290 Super Duke R', '790 Duke', '390 Duke', '690 Enduro', 
+        '1290 Super Adventure', '890 Adventure', '390 Adventure', 
+        '250 Adventure', 'RC 390', 'RC 125', '125 Duke', '200 Duke', 
+        '450 SX-F', '350 SX-F', '250 SX-F', '125 SX', '85 SX', '65 SX', 
+        '50 SX', '300 EXC', '250 EXC', '150 EXC', '125 EXC', 'Freeride', 
+        'X-Bow'
+    ],
+    Ducati: [
+        'Panigale V4', 'Monster', 'Scrambler', 'Multistrada', 'Streetfighter', 
+        'Diavel', 'Hypermotard', 'Supersport', 'Panigale V2', 'Superleggera V4', 
+        'XDiavel', 'DesertX', 'Streetfighter V4', 'Monster SP', 'Scrambler 1100', 
+        'Scrambler 800', 'Multistrada V4', 'Panigale 1299', '1199 Panigale', 
+        '1098', '899 Panigale', '848', '796', '696', '620', '600', '400', 
+        '350', '250', '160', '125', 'Ducati 999', 'Ducati 998', 'Ducati 996', 
+        'Ducati 916', 'Ducati 900', 'Ducati 750', 'Ducati 500', 'Ducati 350', 
+        'Ducati 250', 'Ducati 125', 'Ducati 100', 'Ducati 50'
+    ],
+    Triumph: [
+        'Street Triple', 'Speed Triple', 'Tiger 900', 'Bonneville', 
+        'Rocket 3', 'Trident 660', 'Tiger 1200', 'Scrambler 1200', 
+        'Bonneville T120', 'Bonneville T100', 'Thruxton', 'Bonneville Bobber', 
+        'Bonneville Speedmaster', 'Rocket 3 GT', 'Rocket 3 R', 'Tiger Sport 660', 
+        'Street Twin', 'Speed Twin', 'Scrambler 900', 'Thruxton RS', 
+        'Bonneville Speed Twin', 'Daytona', 'Sprint', 'Legend', 'Thunderbird', 
+        'America', 'Speedmaster', 'Bonneville SE', 'Bonneville Black', 
+        'Bonneville Scrambler', 'Bonneville T100 Black', 'Bonneville T120 Black'
+    ],
+    'Royal Enfield': [
+        'Classic 350', 'Meteor 350', 'Bullet 350', 'Interceptor 650', 
+        'Continental GT 650', 'Himalayan', 'Classic 500', 'Bullet 500', 
+        'Thunderbird', 'Continental GT 535', 'Himalayan 450', 'Scram 411', 
+        'Hunter 350', 'Bullet 500 ES', 'Classic 500 Signals', 'Meteor 350 Fireball', 
+        'Interceptor 650 Canyon', 'Continental GT 650 Dual Tone', 
+        'Himalayan Gravel', 'Bullet 350 X', 'Classic 350 X', 'Meteor 350 Stellar', 
+        'Interceptor 650 Mark 2', 'Continental GT 650 Mark 2', 'Himalayan AD
