@@ -113,6 +113,50 @@ const app = {
             "Механическая": "Водитель вручную с помощью рычага сцепления (на руле) и педали переключения передач (ножной рычаг). Подавляющее большинство мотоциклов.",
             "Автоматическая (DCT / Вариатор)": "Водитель не управляет сцеплением (нет рычага сцепление). Переключение автоматическое или ручное по желанию. Honda DCT, скутеры с вариатором.",
             "Полуавтоматическая": "У мотоцикла нет рычага сцепления на руле, но при этом есть педаль или кнопка, как на механической коробке. Старые мопеды, скутеры с педалями."
+        },
+        originCountries: {
+            "Дилерский ПТС РФ": {
+                description: "Мотоцикл был новым официально ввезен в Россию дилером (импортером) и продан первому владельцу. Первым и единственным документом на мотоцикл является российский ПТС (Паспорт Транспортного Средства), выданный таможенными органами РФ.",
+                examples: ["Полная история обслуживания у официального дилера", "Российская гарантия", "Первый владелец в ПТС"]
+            },
+            "Япония": {
+                description: "Мотоциклы для внутреннего японского рынка. Часто имеют ограничение максимальной скорости (~180 км/ч), спидометр только в км/ч, специфичную маркировку (надписи на японском). Могут быть 'экономичные' версии двигателей. Часто оснащены катафотами на вилках.",
+                examples: ["Спидометр только в км/ч", "Японские надписи на панели", "Катафоты на вилках", "Экономичные версии двигателей"]
+            },
+            "Европа": {
+                description: "Мотоциклы для европейского рынка. Спидометр в км/ч, часто дублируется в милях. Соответствуют строгим экологическим нормам Евро. Комплектации могут быть богаче, чем базовые для других рынков.",
+                examples: ["Спидометр в км/ч и милях", "Соответствие нормам Евро-4/5", "Богатые комплектации", "Немецкие/итальянские документы"]
+            },
+            "США / Аукцион": {
+                description: "Мотоциклы для североамериканского рынка. Главный отличительный признак — спидометр в милях (большие цифры - mph). Фары могут иметь другой режим работы (горят всегда). Могут быть отличия в настройках двигателя и составе выхлопа.",
+                examples: ["Спидометр в милях (mph)", "Фары горят постоянно", "Американские настройки двигателя", "Сертификат соответствия EPA"]
+            },
+            "Другое": {
+                description: "Другое происхождение мотоцикла, не подходящее под основные категории.",
+                examples: ["Канадский рынок", "Австралийский рынок", "Локальные рынки Азии"]
+            }
+        },
+        auctionTypes: {
+            "Без аукционного листа": {
+                description: "Покупка мотоцикла у частного перекупщика или небольшого дилера в стране-экспортере (чаще всего Япония) без предоставления официального отчета о состоянии.",
+                examples: ["Частный перекупщик в Японии", "Небольшой дилер", "Без официального отчета"]
+            },
+            "Аукцион Японии": {
+                description: "Мотоцикл имеет Аукционный лист — паспорт лота. При выборе данного пункта появляется возможность ввода номера аукционного листа или ссылки на лот.",
+                examples: ["USS Tokyo", "JU Nagoya", "ARAI", "CAA"]
+            },
+            "Аукцион США (битый)": {
+                description: "Мотоцикл имеет Аукционный лист — паспорт лота. При выборе данного пункта появляется возможность ввода номера аукционного листа или ссылки на лот.",
+                examples: ["Copart", "IAAI", "Manheim"]
+            },
+            "Европейский / дилер": {
+                description: "Покупка мотоцикла у официального дилера или крупного специализированного салона в Европе (например, в Германии, Польше, Чехии и Швейцарии), а также частных продаж.",
+                examples: ["Официальный дилер BMW", "Специализированный салон", "Частные продажи в Европе"]
+            },
+            "Частник по ДКП": {
+                description: "Прямая покупка у владельца мотоцикла с оформлением стандартного договора купли-продажи.",
+                examples: ["Договор купли-продажи", "Прямая сделка с владельцем", "Российский ПТС"]
+            }
         }
     },
     state: {
@@ -515,6 +559,23 @@ const app = {
                 this.showEnhancedTooltip('gearbox', gearboxTypeSelect.value);
             });
         }
+        
+        // Обработчики для селекта происхождения мотоцикла
+        const originCountrySelect = document.getElementById('origin_country');
+        if (originCountrySelect) {
+            originCountrySelect.addEventListener('change', () => {
+                this.showEnhancedTooltip('origin', originCountrySelect.value);
+            });
+        }
+        
+        // Обработчики для селекта аукциона/поставки
+        const auctionTypeSelect = document.getElementById('auction_type');
+        if (auctionTypeSelect) {
+            auctionTypeSelect.addEventListener('change', () => {
+                this.showEnhancedTooltip('auction', auctionTypeSelect.value);
+                this.toggleAuctionLotField(auctionTypeSelect.value);
+            });
+        }
     },
     
     // Показать расширенную всплывающую подсказку
@@ -533,6 +594,16 @@ const app = {
         } else if (type === 'gearbox' && this.config.gearboxTypes[value]) {
             title = value;
             description = this.config.gearboxTypes[value];
+        } else if (type === 'origin' && this.config.originCountries[value]) {
+            const originInfo = this.config.originCountries[value];
+            title = value;
+            description = originInfo.description;
+            examples = originInfo.examples.join(', ');
+        } else if (type === 'auction' && this.config.auctionTypes[value]) {
+            const auctionInfo = this.config.auctionTypes[value];
+            title = value;
+            description = auctionInfo.description;
+            examples = auctionInfo.examples.join(', ');
         } else {
             return;
         }
@@ -588,6 +659,16 @@ const app = {
                 }
             }, 300);
         }, duration);
+    },
+    
+    // Показать/скрыть поле номера аукционного лота
+    toggleAuctionLotField(auctionType) {
+        const auctionLotGroup = document.getElementById('auctionLotNumberGroup');
+        if (!auctionLotGroup) return;
+        
+        // Показываем поле только для аукционов Японии и США
+        const showLotField = auctionType === 'Аукцион Японии' || auctionType === 'Аукцион США (битый)';
+        auctionLotGroup.classList.toggle('hidden', !showLotField);
     },
     
     updateProgress() {
@@ -711,10 +792,14 @@ const app = {
             const brandCustom = document.getElementById('brand_custom');
             const modelCustom = document.getElementById('model_custom');
             const inspectionFields = document.getElementById('inspectionFields');
+            const auctionLotGroup = document.getElementById('auctionLotNumberGroup');
             
             if (brandCustom) brandCustom.classList.toggle('hidden', data.brand !== 'Другая марка');
             if (modelCustom) modelCustom.classList.toggle('hidden', data.model !== 'Другая модель');
             if (inspectionFields) inspectionFields.classList.toggle('hidden', data.decision !== '📅 Запланировать проверку');
+            if (auctionLotGroup && data.auction_type) {
+                this.toggleAuctionLotField(data.auction_type);
+            }
             
         } catch (e) {
             console.warn('Ошибка загрузки формы:', e);
@@ -879,7 +964,10 @@ const app = {
             }
         }
         
-        // Убрана информация о VIN, номере двигателя и гос. номере для соцсетей
+        // Добавляем информацию о происхождении и аукционе
+        if (data.origin_country) report += `🌍 Происхождение: ${data.origin_country}\n`;
+        if (data.auction_type) report += `🏷️ Аукцион/поставка: ${data.auction_type}\n`;
+        if (data.auction_lot_number) report += `📋 Номер лота/ссылка: ${data.auction_lot_number}\n`;
         
         if (data.motorcycle_class) report += `🏷️ Класс: ${data.motorcycle_class}\n`;
         
@@ -998,12 +1086,14 @@ const app = {
         const inspectionFields = document.getElementById('inspectionFields');
         const brandCustom = document.getElementById('brand_custom');
         const modelCustom = document.getElementById('model_custom');
+        const auctionLotGroup = document.getElementById('auctionLotNumberGroup');
         
         if (outputCard) outputCard.classList.add('hidden');
         if (savingsAlert) savingsAlert.classList.add('hidden');
         if (inspectionFields) inspectionFields.classList.add('hidden');
         if (brandCustom) brandCustom.classList.add('hidden');
         if (modelCustom) modelCustom.classList.add('hidden');
+        if (auctionLotGroup) auctionLotGroup.classList.add('hidden');
         
         // Сбрасываем список моделей
         const brandSelect = document.getElementById('brand');
@@ -1206,10 +1296,14 @@ const app = {
         const brandCustom = document.getElementById('brand_custom');
         const modelCustom = document.getElementById('model_custom');
         const inspectionFields = document.getElementById('inspectionFields');
+        const auctionLotGroup = document.getElementById('auctionLotNumberGroup');
         
         if (brandCustom) brandCustom.classList.toggle('hidden', report.brand !== 'Другая марка');
         if (modelCustom) modelCustom.classList.toggle('hidden', report.model !== 'Другая модель');
         if (inspectionFields) inspectionFields.classList.toggle('hidden', report.decision !== '📅 Запланировать проверку');
+        if (auctionLotGroup && report.auction_type) {
+            this.toggleAuctionLotField(report.auction_type);
+        }
         
         this.updateProgress();
         
