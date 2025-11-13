@@ -630,3 +630,81 @@ input:checked + .toggle-slider:before { transform: translateX(24px); }
     margin-top: 4px;
     font-style: italic;
 }
+
+/* Inline подсказки для классов мотоциклов и типов коробки */
+.inline-tooltip-container {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.inline-tooltip-container .form-group {
+    flex: 1;
+}
+
+.inline-tooltip {
+    flex: 1;
+    background: rgba(99, 102, 241, 0.05);
+    border: 1px solid var(--primary-color);
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 28px;
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+    position: relative;
+}
+
+.inline-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 20px;
+    width: 12px;
+    height: 12px;
+    background: var(--card-bg);
+    border-left: 1px solid var(--primary-color);
+    border-top: 1px solid var(--primary-color);
+    transform: rotate(45deg);
+}
+
+.inline-tooltip-content h4 {
+    margin: 0 0 6px 0;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.inline-tooltip-content .tooltip-description {
+    margin-bottom: 6px;
+    color: var(--text-color);
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.inline-tooltip-content .tooltip-examples {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-style: italic;
+}
+
+.inline-tooltip-content .tooltip-examples strong {
+    color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+    .inline-tooltip-container {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .inline-tooltip {
+        margin-top: 0;
+        min-height: auto;
+    }
+    
+    .inline-tooltip::before {
+        display: none;
+    }
+}
