@@ -147,38 +147,54 @@
                                        data-tooltip="Регистрационный номерной знак, выдаваемый при постановке на учет в ГИБДД.">
                             </div>
 
-                            <div class="form-group">
-                                <label for="motorcycle_class">Класс мотоцикла</label>
-                                <select id="motorcycle_class" name="motorcycle_class">
-                                    <option value="">-- Выберите класс --</option>
-                                    <option value="Спортивные (Sport)">Спортивные (Sport)</option>
-                                    <option value="Голые (Naked)">Голые (Naked)</option>
-                                    <option value="Круизеры / Чопперы">Круизеры / Чопперы</option>
-                                    <option value="Туристические (Touring)">Туристические (Touring)</option>
-                                    <option value="Спорт-туризм (Sport-Touring)">Спорт-туризм (Sport-Touring)</option>
-                                    <option value="Классика / Ретро (Classic)">Классика / Ретро (Classic)</option>
-                                    <option value="Кафе-рейсеры (Cafe Racer)">Кафе-рейсеры (Cafe Racer)</option>
-                                    <option value="Мотокросс (Motocross)">Мотокросс (Motocross)</option>
-                                    <option value="Эндуро (Enduro)">Эндуро (Enduro)</option>
-                                    <option value="Трэйл (Trail)">Трэйл (Trail)</option>
-                                    <option value="Эдвенчер (Adventure)">Эдвенчер (Adventure)</option>
-                                    <option value="Супермото (Supermoto)">Супермото (Supermoto)</option>
-                                    <option value="Скутеры (Scooter)">Скутеры (Scooter)</option>
-                                    <option value="Мопеды / Легкие мотоциклы">Мопеды / Легкие мотоциклы</option>
-                                    <option value="Электрические мотоциклы">Электрические мотоциклы</option>
-                                </select>
+                            <!-- Класс мотоцикла с inline-подсказкой -->
+                            <div class="inline-tooltip-container">
+                                <div class="form-group">
+                                    <label for="motorcycle_class">Класс мотоцикла</label>
+                                    <select id="motorcycle_class" name="motorcycle_class">
+                                        <option value="">-- Выберите класс --</option>
+                                        <option value="Спортивные (Sport)">Спортивные (Sport)</option>
+                                        <option value="Голые (Naked)">Голые (Naked)</option>
+                                        <option value="Круизеры / Чопперы">Круизеры / Чопперы</option>
+                                        <option value="Туристические (Touring)">Туристические (Touring)</option>
+                                        <option value="Спорт-туризм (Sport-Touring)">Спорт-туризм (Sport-Touring)</option>
+                                        <option value="Классика / Ретро (Classic)">Классика / Ретро (Classic)</option>
+                                        <option value="Кафе-рейсеры (Cafe Racer)">Кафе-рейсеры (Cafe Racer)</option>
+                                        <option value="Мотокросс (Motocross)">Мотокросс (Motocross)</option>
+                                        <option value="Эндуро (Enduro)">Эндуро (Enduro)</option>
+                                        <option value="Трэйл (Trail)">Трэйл (Trail)</option>
+                                        <option value="Эдвенчер (Adventure)">Эдвенчер (Adventure)</option>
+                                        <option value="Супермото (Supermoto)">Супермото (Supermoto)</option>
+                                        <option value="Скутеры (Scooter)">Скутеры (Scooter)</option>
+                                        <option value="Мопеды / Легкие мотоциклы">Мопеды / Легкие мотоциклы</option>
+                                        <option value="Электрические мотоциклы">Электрические мотоциклы</option>
+                                    </select>
+                                </div>
+                                <div class="inline-tooltip hidden" id="motorcycleClassTooltip">
+                                    <div class="inline-tooltip-content">
+                                        <!-- Содержимое будет заполнено JavaScript -->
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="form-group">
-                                <label for="gearbox_type">Тип коробки</label>
-                                <select id="gearbox_type" name="gearbox_type">
-                                    <option value="">-- Выберите тип --</option>
-                                    <option value="Механическая">Механическая</option>
-                                    <option value="Автоматическая">Автоматическая</option>
-                                    <option value="Полуавтоматическая">Полуавтоматическая</option>
-                                </select>
+                            <!-- Тип коробки с inline-подсказкой -->
+                            <div class="inline-tooltip-container">
+                                <div class="form-group">
+                                    <label for="gearbox_type">Тип коробки</label>
+                                    <select id="gearbox_type" name="gearbox_type">
+                                        <option value="">-- Выберите тип --</option>
+                                        <option value="Механическая">Механическая</option>
+                                        <option value="Автоматическая (DCT / Вариатор)">Автоматическая (DCT / Вариатор)</option>
+                                        <option value="Полуавтоматическая">Полуавтоматическая</option>
+                                    </select>
+                                </div>
+                                <div class="inline-tooltip hidden" id="gearboxTypeTooltip">
+                                    <div class="inline-tooltip-content">
+                                        <!-- Содержимое будет заполнено JavaScript -->
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="form-group">
