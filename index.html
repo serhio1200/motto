@@ -183,7 +183,7 @@
 
                             <div class="form-group">
                                 <label for="origin_country">Происхождение мотоцикла</label>
-                                <select id="origin_country" name="origin_country" data-tooltip="Дилерский ПТС РФ - Официальный ввоз в Россию. Япония - Для внутреннего японского рынка. Европа - Для европейского рынка. США / Аукцион - Для североамериканского рынка.">
+                                <select id="origin_country" name="origin_country" data-tooltip="Выберите происхождение мотоцикла для просмотра подробного описания">
                                     <option value="">-- Выберите происхождение --</option>
                                     <option value="Дилерский ПТС РФ">Дилерский ПТС РФ</option>
                                     <option value="Япония">Япония</option>
@@ -197,7 +197,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="auction_type">Аукцион / поставка</label>
-                                <select id="auction_type" name="auction_type" data-tooltip="Без аукционного листа - Покупка у частного перекупщика. Аукцион Японии/США - С аукционным листом. Европейский / дилер - Покупка у официального дилера. Частник по ДКП - Прямая покупка у владельца.">
+                                <select id="auction_type" name="auction_type" data-tooltip="Выберите тип аукциона или поставки для просмотра подробного описания">
                                     <option value="">-- Выберите тип --</option>
                                     <option value="Без аукционного листа">Без аукционного листа</option>
                                     <option value="Аукцион Японии">Аукцион Японии</option>
@@ -206,6 +206,13 @@
                                     <option value="Частник по ДКП">Частник по ДКП</option>
                                 </select>
                             </div>
+                        </div>
+
+                        <!-- Добавляем поле для номера аукционного лота -->
+                        <div class="form-group hidden" id="auctionLotNumberGroup">
+                            <label for="auction_lot_number">Номер аукционного листа или ссылка на лот</label>
+                            <input type="text" id="auction_lot_number" name="auction_lot_number" placeholder="Например: 1234567 или https://..."
+                                   data-tooltip="Укажите номер аукционного листа или ссылку на лот для японских или американских аукционов">
                         </div>
                     </div>
 
