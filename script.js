@@ -111,7 +111,7 @@ const app = {
         },
         gearboxTypes: {
             "Механическая": "Водитель вручную с помощью рычага сцепления (на руле) и педали переключения передач (ножной рычаг). Подавляющее большинство мотоциклов.",
-            "Автоматическая": "Водитель не управляет сцеплением (нет рычага сцепление). Переключение автоматическое или ручное по желанию. Honda DCT, скутеры с вариатором.",
+            "Автоматическая (DCT / Вариатор)": "Водитель не управляет сцеплением (нет рычага сцепление). Переключение автоматическое или ручное по желанию. Honda DCT, скутеры с вариатором.",
             "Полуавтоматическая": "У мотоцикла нет рычага сцепления на руле, но при этом есть педаль или кнопка, как на механической коробке. Старые мопеды, скутеры с педалями."
         }
     },
@@ -183,6 +183,9 @@ const app = {
         
         // Инициализация подсказок
         this.initTooltips();
+        
+        // Инициализация inline-подсказок для классов и коробок
+        this.initInlineTooltips();
     },
     
     initNavigation() {
@@ -493,50 +496,71 @@ const app = {
             });
             element.addEventListener('blur', hideTooltip);
         });
-        
-        // Специальная обработка для классов мотоциклов
+    },
+    
+    // Инициализация inline-подсказок для классов мотоциклов и типов коробки
+    initInlineTooltips() {
+        // Обработчики для селекта класса мотоцикла
         const motorcycleClassSelect = document.getElementById('motorcycle_class');
-        if (motorcycleClassSelect) {
-            motorcycleClassSelect.addEventListener('change', function() {
-                const selectedClass = this.value;
-                if (selectedClass && app.config.motorcycleClasses[selectedClass]) {
-                    const classInfo = app.config.motorcycleClasses[selectedClass];
-                    showTooltip(this, `${classInfo.description}\n\nПримеры: ${classInfo.examples.join(', ')}`);
-                }
+        const motorcycleClassTooltip = document.getElementById('motorcycleClassTooltip');
+        
+        if (motorcycleClassSelect && motorcycleClassTooltip) {
+            motorcycleClassSelect.addEventListener('change', () => {
+                this.updateInlineTooltip(motorcycleClassSelect, motorcycleClassTooltip, 'class');
             });
             
-            // Показываем подсказку при фокусе
-            motorcycleClassSelect.addEventListener('focus', function() {
-                const selectedClass = this.value;
-                if (selectedClass && app.config.motorcycleClasses[selectedClass]) {
-                    const classInfo = app.config.motorcycleClasses[selectedClass];
-                    showTooltip(this, `${classInfo.description}\n\nПримеры: ${classInfo.examples.join(', ')}`);
-                } else {
-                    showTooltip(this, "Выберите класс мотоцикла для просмотра подробного описания");
-                }
-            });
+            // Инициализация при загрузке, если есть значение
+            if (motorcycleClassSelect.value) {
+                this.updateInlineTooltip(motorcycleClassSelect, motorcycleClassTooltip, 'class');
+            }
         }
         
-        // Специальная обработка для типа коробки передач
+        // Обработчики для селекта типа коробки
         const gearboxTypeSelect = document.getElementById('gearbox_type');
-        if (gearboxTypeSelect) {
-            gearboxTypeSelect.addEventListener('change', function() {
-                const selectedType = this.value;
-                if (selectedType && app.config.gearboxTypes[selectedType]) {
-                    showTooltip(this, app.config.gearboxTypes[selectedType]);
-                }
+        const gearboxTypeTooltip = document.getElementById('gearboxTypeTooltip');
+        
+        if (gearboxTypeSelect && gearboxTypeTooltip) {
+            gearboxTypeSelect.addEventListener('change', () => {
+                this.updateInlineTooltip(gearboxTypeSelect, gearboxTypeTooltip, 'gearbox');
             });
             
-            // Показываем подсказку при фокусе
-            gearboxTypeSelect.addEventListener('focus', function() {
-                const selectedType = this.value;
-                if (selectedType && app.config.gearboxTypes[selectedType]) {
-                    showTooltip(this, app.config.gearboxTypes[selectedType]);
-                } else {
-                    showTooltip(this, "Выберите тип коробки передач для просмотра подробного описания");
-                }
-            });
+            // Инициализация при загрузке, если есть значение
+            if (gearboxTypeSelect.value) {
+                this.updateInlineTooltip(gearboxTypeSelect, gearboxTypeTooltip, 'gearbox');
+            }
         }
+    },
+    
+    // Обновление inline-подсказки
+    updateInlineTooltip(selectElement, tooltipElement, type) {
+        const value = selectElement.value;
+        
+        if (!value) {
+            tooltipElement.classList.add('hidden');
+            return;
+        }
+        
+        let tooltipContent = '';
+        
+        if (type === 'class' && this.config.motorcycleClasses[value]) {
+            const classInfo = this.config.motorcycleClasses[value];
+            tooltipContent = `
+                <h4>${value}</h4>
+                <div class="tooltip-description">${classInfo.description}</div>
+                <div class="tooltip-examples"><strong>Примеры:</strong> ${classInfo.examples.join(', ')}</div>
+            `;
+        } else if (type === 'gearbox' && this.config.gearboxTypes[value]) {
+            tooltipContent = `
+                <h4>${value}</h4>
+                <div class="tooltip-description">${this.config.gearboxTypes[value]}</div>
+            `;
+        } else {
+            tooltipElement.classList.add('hidden');
+            return;
+        }
+        
+        tooltipElement.querySelector('.inline-tooltip-content').innerHTML = tooltipContent;
+        tooltipElement.classList.remove('hidden');
     },
     
     updateProgress() {
@@ -664,6 +688,20 @@ const app = {
             if (brandCustom) brandCustom.classList.toggle('hidden', data.brand !== 'Другая марка');
             if (modelCustom) modelCustom.classList.toggle('hidden', data.model !== 'Другая модель');
             if (inspectionFields) inspectionFields.classList.toggle('hidden', data.decision !== '📅 Запланировать проверку');
+            
+            // Обновляем inline-подсказки
+            const motorcycleClassSelect = document.getElementById('motorcycle_class');
+            const motorcycleClassTooltip = document.getElementById('motorcycleClassTooltip');
+            const gearboxTypeSelect = document.getElementById('gearbox_type');
+            const gearboxTypeTooltip = document.getElementById('gearboxTypeTooltip');
+            
+            if (motorcycleClassSelect && motorcycleClassTooltip && data.motorcycle_class) {
+                this.updateInlineTooltip(motorcycleClassSelect, motorcycleClassTooltip, 'class');
+            }
+            
+            if (gearboxTypeSelect && gearboxTypeTooltip && data.gearbox_type) {
+                this.updateInlineTooltip(gearboxTypeSelect, gearboxTypeTooltip, 'gearbox');
+            }
             
         } catch (e) {
             console.warn('Ошибка загрузки формы:', e);
@@ -961,6 +999,13 @@ const app = {
             brandSelect.dispatchEvent(new Event('change'));
         }
         
+        // Скрываем inline-подсказки
+        const motorcycleClassTooltip = document.getElementById('motorcycleClassTooltip');
+        const gearboxTypeTooltip = document.getElementById('gearboxTypeTooltip');
+        
+        if (motorcycleClassTooltip) motorcycleClassTooltip.classList.add('hidden');
+        if (gearboxTypeTooltip) gearboxTypeTooltip.classList.add('hidden');
+        
         this.updateProgress();
         this.showToast('Форма очищена', 'success');
     },
@@ -1159,6 +1204,20 @@ const app = {
         if (brandCustom) brandCustom.classList.toggle('hidden', report.brand !== 'Другая марка');
         if (modelCustom) modelCustom.classList.toggle('hidden', report.model !== 'Другая модель');
         if (inspectionFields) inspectionFields.classList.toggle('hidden', report.decision !== '📅 Запланировать проверку');
+        
+        // Обновляем inline-подсказки
+        const motorcycleClassSelect = document.getElementById('motorcycle_class');
+        const motorcycleClassTooltip = document.getElementById('motorcycleClassTooltip');
+        const gearboxTypeSelect = document.getElementById('gearbox_type');
+        const gearboxTypeTooltip = document.getElementById('gearboxTypeTooltip');
+        
+        if (motorcycleClassSelect && motorcycleClassTooltip && report.motorcycle_class) {
+            this.updateInlineTooltip(motorcycleClassSelect, motorcycleClassTooltip, 'class');
+        }
+        
+        if (gearboxTypeSelect && gearboxTypeTooltip && report.gearbox_type) {
+            this.updateInlineTooltip(gearboxTypeSelect, gearboxTypeTooltip, 'gearbox');
+        }
         
         this.updateProgress();
         
