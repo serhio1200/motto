@@ -184,8 +184,8 @@ const app = {
         // Инициализация подсказок
         this.initTooltips();
         
-        // Инициализация inline-подсказок для классов и коробок
-        this.initInlineTooltips();
+        // Инициализация всплывающих подсказок для классов и коробок
+        this.initEnhancedTooltips();
     },
     
     initNavigation() {
@@ -498,69 +498,96 @@ const app = {
         });
     },
     
-    // Инициализация inline-подсказок для классов мотоциклов и типов коробки
-    initInlineTooltips() {
+    // Инициализация всплывающих подсказок для классов мотоциклов и типов коробки
+    initEnhancedTooltips() {
         // Обработчики для селекта класса мотоцикла
         const motorcycleClassSelect = document.getElementById('motorcycle_class');
-        const motorcycleClassTooltip = document.getElementById('motorcycleClassTooltip');
-        
-        if (motorcycleClassSelect && motorcycleClassTooltip) {
+        if (motorcycleClassSelect) {
             motorcycleClassSelect.addEventListener('change', () => {
-                this.updateInlineTooltip(motorcycleClassSelect, motorcycleClassTooltip, 'class');
+                this.showEnhancedTooltip('class', motorcycleClassSelect.value);
             });
-            
-            // Инициализация при загрузке, если есть значение
-            if (motorcycleClassSelect.value) {
-                this.updateInlineTooltip(motorcycleClassSelect, motorcycleClassTooltip, 'class');
-            }
         }
         
         // Обработчики для селекта типа коробки
         const gearboxTypeSelect = document.getElementById('gearbox_type');
-        const gearboxTypeTooltip = document.getElementById('gearboxTypeTooltip');
-        
-        if (gearboxTypeSelect && gearboxTypeTooltip) {
+        if (gearboxTypeSelect) {
             gearboxTypeSelect.addEventListener('change', () => {
-                this.updateInlineTooltip(gearboxTypeSelect, gearboxTypeTooltip, 'gearbox');
+                this.showEnhancedTooltip('gearbox', gearboxTypeSelect.value);
             });
-            
-            // Инициализация при загрузке, если есть значение
-            if (gearboxTypeSelect.value) {
-                this.updateInlineTooltip(gearboxTypeSelect, gearboxTypeTooltip, 'gearbox');
-            }
         }
     },
     
-    // Обновление inline-подсказки
-    updateInlineTooltip(selectElement, tooltipElement, type) {
-        const value = selectElement.value;
+    // Показать расширенную всплывающую подсказку
+    showEnhancedTooltip(type, value) {
+        if (!value) return;
         
-        if (!value) {
-            tooltipElement.classList.add('hidden');
-            return;
-        }
-        
-        let tooltipContent = '';
+        let title = '';
+        let description = '';
+        let examples = '';
         
         if (type === 'class' && this.config.motorcycleClasses[value]) {
             const classInfo = this.config.motorcycleClasses[value];
-            tooltipContent = `
-                <h4>${value}</h4>
-                <div class="tooltip-description">${classInfo.description}</div>
-                <div class="tooltip-examples"><strong>Примеры:</strong> ${classInfo.examples.join(', ')}</div>
-            `;
+            title = value;
+            description = classInfo.description;
+            examples = classInfo.examples.join(', ');
         } else if (type === 'gearbox' && this.config.gearboxTypes[value]) {
-            tooltipContent = `
-                <h4>${value}</h4>
-                <div class="tooltip-description">${this.config.gearboxTypes[value]}</div>
-            `;
+            title = value;
+            description = this.config.gearboxTypes[value];
         } else {
-            tooltipElement.classList.add('hidden');
             return;
         }
         
-        tooltipElement.querySelector('.inline-tooltip-content').innerHTML = tooltipContent;
-        tooltipElement.classList.remove('hidden');
+        this.showEnhancedToast(title, description, examples);
+    },
+    
+    // Показать расширенное toast-уведомление
+    showEnhancedToast(title, description, examples = '') {
+        const container = document.getElementById('toastContainer');
+        if (!container) return;
+        
+        const toast = document.createElement('div');
+        toast.className = 'toast toast-info toast-enhanced';
+        toast.setAttribute('role', 'status');
+        
+        let toastContent = `
+            <div class="toast-title">${this.escapeHtml(title)}</div>
+            <div class="toast-description">${this.escapeHtml(description)}</div>
+        `;
+        
+        if (examples) {
+            toastContent += `
+                <div class="toast-examples">
+                    <strong>Примеры:</strong> ${this.escapeHtml(examples)}
+                </div>
+            `;
+        }
+        
+        toast.innerHTML = toastContent;
+        
+        container.appendChild(toast);
+        
+        // Аудио/вибро по настройкам
+        const vibrationEl = document.getElementById('vibration');
+        const soundEl = document.getElementById('soundNotifications');
+        
+        if (vibrationEl && vibrationEl.checked && navigator.vibrate) {
+            navigator.vibrate(50);
+        }
+        
+        requestAnimationFrame(() => toast.classList.add('show'));
+        
+        // Автоматическое скрытие через 7-8 секунд в зависимости от длины текста
+        const textLength = title.length + description.length + examples.length;
+        const duration = textLength > 200 ? 8000 : 7000;
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.remove();
+                }
+            }, 300);
+        }, duration);
     },
     
     updateProgress() {
@@ -688,20 +715,6 @@ const app = {
             if (brandCustom) brandCustom.classList.toggle('hidden', data.brand !== 'Другая марка');
             if (modelCustom) modelCustom.classList.toggle('hidden', data.model !== 'Другая модель');
             if (inspectionFields) inspectionFields.classList.toggle('hidden', data.decision !== '📅 Запланировать проверку');
-            
-            // Обновляем inline-подсказки
-            const motorcycleClassSelect = document.getElementById('motorcycle_class');
-            const motorcycleClassTooltip = document.getElementById('motorcycleClassTooltip');
-            const gearboxTypeSelect = document.getElementById('gearbox_type');
-            const gearboxTypeTooltip = document.getElementById('gearboxTypeTooltip');
-            
-            if (motorcycleClassSelect && motorcycleClassTooltip && data.motorcycle_class) {
-                this.updateInlineTooltip(motorcycleClassSelect, motorcycleClassTooltip, 'class');
-            }
-            
-            if (gearboxTypeSelect && gearboxTypeTooltip && data.gearbox_type) {
-                this.updateInlineTooltip(gearboxTypeSelect, gearboxTypeTooltip, 'gearbox');
-            }
             
         } catch (e) {
             console.warn('Ошибка загрузки формы:', e);
@@ -999,13 +1012,6 @@ const app = {
             brandSelect.dispatchEvent(new Event('change'));
         }
         
-        // Скрываем inline-подсказки
-        const motorcycleClassTooltip = document.getElementById('motorcycleClassTooltip');
-        const gearboxTypeTooltip = document.getElementById('gearboxTypeTooltip');
-        
-        if (motorcycleClassTooltip) motorcycleClassTooltip.classList.add('hidden');
-        if (gearboxTypeTooltip) gearboxTypeTooltip.classList.add('hidden');
-        
         this.updateProgress();
         this.showToast('Форма очищена', 'success');
     },
@@ -1092,6 +1098,10 @@ const app = {
         this.showToast(message, 'warning');
     },
     
+    escapeHtml(str) {
+        return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+    },
+    
     // Методы для работы с базой данных
     loadReportsList() {
         const reportsList = document.getElementById('reportsList');
@@ -1143,10 +1153,6 @@ const app = {
                 </div>
             </div>
         `).join('');
-    },
-    
-    escapeHtml(str) {
-        return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
     },
     
     viewReport(reportId) {
@@ -1204,20 +1210,6 @@ const app = {
         if (brandCustom) brandCustom.classList.toggle('hidden', report.brand !== 'Другая марка');
         if (modelCustom) modelCustom.classList.toggle('hidden', report.model !== 'Другая модель');
         if (inspectionFields) inspectionFields.classList.toggle('hidden', report.decision !== '📅 Запланировать проверку');
-        
-        // Обновляем inline-подсказки
-        const motorcycleClassSelect = document.getElementById('motorcycle_class');
-        const motorcycleClassTooltip = document.getElementById('motorcycleClassTooltip');
-        const gearboxTypeSelect = document.getElementById('gearbox_type');
-        const gearboxTypeTooltip = document.getElementById('gearboxTypeTooltip');
-        
-        if (motorcycleClassSelect && motorcycleClassTooltip && report.motorcycle_class) {
-            this.updateInlineTooltip(motorcycleClassSelect, motorcycleClassTooltip, 'class');
-        }
-        
-        if (gearboxTypeSelect && gearboxTypeTooltip && report.gearbox_type) {
-            this.updateInlineTooltip(gearboxTypeSelect, gearboxTypeTooltip, 'gearbox');
-        }
         
         this.updateProgress();
         
